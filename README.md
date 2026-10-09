@@ -34,10 +34,12 @@ React (Vite) ──/api──► FastAPI (Vercel Python) ──► Qwen 3.8 27B 
 3. **PvP online** — sala com código de 4 letras, mesmo lote de perguntas, placar ao vivo.
 4. **Sobrevivência** — 20 s por pergunta, dificuldade sobe a cada 3 acertos, acaba no 1º erro.
 5. **Sequência (streak)** e **pontuação por rapidez** + **ranking global**.
-6. **Quem é esse jogador?** — caricatura (Gemini) + foto real que começa borrada e clareia a cada chute errado + 5 dicas da IA; vale menos pontos a cada erro.
+6. **Quem é esse jogador?** — caricatura (Gemini) + foto real que começa borrada e clareia a cada chute errado + 5 dicas da IA; vale menos pontos a cada erro. Chutes errados viram **pistas por comparação** (mesmo país? mesmo setor do campo?), inspiradas no *Who Are Ya?*.
 7. **Álbum de figurinhas** — 24 craques; todos os modos dão pacotinhos (mais figurinhas nos níveis altos da campanha, para o vencedor do PvP etc.), com repetidas e figurinhas ✨ brilhantes.
 
-**Robustez da IA:** lista de modelos com reserva (`LLM_MODEL=principal,reserva`): se a cota da Groq estoura (HTTP 429), tenta o próximo modelo; se todos falham, usa o cache. As dicas passam por validação anti-alucinação (não podem citar o nome nem números que não estão na pista).
+**Configurações:** nome do jogador, som liga/desliga e apagar progresso (tela "Filtros e Configurações").
+
+**Robustez da IA:** lista de modelos com reserva (`LLM_MODEL=principal,reserva`): se a cota da Groq estoura (HTTP 429), tenta o próximo modelo; se todos falham, usa o cache, que é **pré-gerado pela IA** (`scripts/aquece_cache.py`: 2+ perguntas por fato e 2 versões de dicas por jogador). Um cron diário da Vercel (`/api/saude`) mantém o Supabase gratuito ativo. As dicas passam por validação anti-alucinação (não podem citar o nome nem números que não estão na pista).
 
 ## Como rodar localmente
 
@@ -60,7 +62,7 @@ npm run dev                 # jogo em http://localhost:5173
 
 ## Testes
 ```bash
-npm test     # 10 testes de mecânicas (node --test) + 13 do motor de IA (pytest)
+npm test     # 11 testes de mecânicas (node --test) + 13 do motor de IA (pytest); também rodam no GitHub Actions
 ```
 
 ## Deploy (Vercel)

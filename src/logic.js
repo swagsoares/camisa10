@@ -52,6 +52,19 @@ export function acertouJogador(chute, jogador) {
   return nomes.includes(c)
 }
 
+// Pistas por comparação (inspirado no "Who Are Ya?"): o chute errado diz o que tem em comum com o certo.
+export function setor(posicao) {
+  const p = posicao.toLowerCase()
+  if (p.includes('goleiro')) return 'Goleiro'
+  if (p.includes('zagueiro') || p.includes('lateral')) return 'Defesa'
+  if (p.includes('meia')) return 'Meio-campo'
+  return 'Ataque'
+}
+export const comparar = (chutado, alvo) => ({
+  pais: chutado.pais === alvo.pais,
+  setor: setor(chutado.posicao) === setor(alvo.posicao),
+})
+
 // ---------- Álbum de figurinhas ----------
 // colecao = { [idJogador]: { qtd, brilhante } }. Recompensas de todos os modos:
 export function recompensa(modo, d) {

@@ -75,7 +75,21 @@
   3. **Tela branca em dev:** o proxy do Vite mandava `/api/jogadores.json` (importado pelo front) para o FastAPI. O proxy passou a ignorar `.json`.
   4. **Bandeiras viravam letras ("NO", "BR")** no Chrome do Windows, que não tem emoji de bandeira. Resolvido com a fonte Noto Color Emoji.
   5. **API da Wikipedia retornava 403** sem um User-Agent identificado (política de robôs da Wikimedia); usamos um com o link do repositório.
-### Prompt 6 — ✍️ (ex.: ajuste depois de vocês jogarem) — ✍️ (ex.: ajuste de dificuldade/visual depois de jogar)
+### Prompt 6 — Revisão geral antes do deploy + pesquisa de apps parecidos
+- **Pedido:** "antes de começarmos a colocar no ar vamos ver tudo que fizemos e tudo que podemos melhorar" e "podemos ver apps parecidos e ver o que conseguimos melhorar"; depois, "melhorar essa parte de filtros e configurações".
+- **O que a IA gerou:** uma auditoria item por item da rubrica, com teste no celular (375px), e uma pesquisa de referências (Who Are Ya?, FootyIQ, On Yer Head, Duolingo, Kahoot).
+- **Riscos encontrados e corrigidos:**
+  1. **O Supabase gratuito pausa após 7 dias sem acesso.** Se o professor abrisse o link semanas depois, o jogo quebraria. Solução: cron diário da Vercel em `/api/saude`, que consulta o banco.
+  2. **Cota da IA na apresentação** (turma jogando ao mesmo tempo): pré-geramos com a IA 105 perguntas (2+ por fato) e 2 versões de dicas por jogador. Nenhuma falhou na validação.
+  3. **Tela de filtros confusa:** o modo ficava abaixo do botão "Iniciar", o modo escolhido não se destacava, os filtros apareciam na Campanha (onde não valem) e não existia nenhuma configuração, apesar do nome do botão. A tela foi reorganizada (modo → filtros → iniciar) e ganhou configurações (nome, som, apagar progresso).
+- **O que o grupo decidiu ou rejeitou:** das 4 ideias tiradas dos apps parecidos (pistas por comparação, desafio diário, ajuda 50/50, compartilhar resultado), implementamos **só as pistas por comparação**, que melhoram um modo existente sem criar tela nova. As outras ficaram como trabalhos futuros, para não inflar o escopo, o vídeo de 5 minutos e o código que precisamos saber explicar.
+- **Também entrou:** CI no GitHub Actions (os testes rodam a cada push) e ranking do "Quem é esse jogador?".
+
+## 3.3 Trabalhos futuros
+- Desafio diário ("jogador do dia", igual para todos) com sequência de dias, estilo Wordle e FootyIQ.
+- Ajuda 50/50 no quiz (power-up estilo Kahoot e Duolingo) e compartilhar o resultado com emojis.
+- Validar as respostas no servidor (hoje ficam no navegador, então dá para trapacear pelo DevTools no PvP e no "Quem é") e conferir pontuações antes de gravar no ranking.
+- Login (Supabase Auth) para sincronizar álbum e progresso entre aparelhos. — ✍️ (ex.: ajuste de dificuldade/visual depois de jogar)
 
 ### 3.2 Como o código funciona — ✍️ TEXTO DO GRUPO (não gerado por IA)
 > Escrevam com as próprias palavras. Roteiro sugerido: (1) o que acontece quando o jogador clica em "Iniciar partida" até a pergunta aparecer (`Partida` → `api('perguntas')` → `montar_lote` → `gerar` → `chamar_llm` → `normalizar`); (2) como o fallback decide usar o cache; (3) como o `Quiz.jsx` faz o prefetch e o timer; (4) como o PvP usa Presence, Broadcast e Postgres Changes; (5) por que a validação Pydantic existe.
@@ -114,10 +128,13 @@
 | 15 | Quem é: chute certo ("haaland" minúsculo e sem acento) | "Golaço!", pacotinho com a figurinha NOVA | ✅ OK |
 | 16 | Quem é: IA fora do ar | Dicas com selo "dicas do grupo" | ✅ (teste automatizado) |
 | 17 | Álbum | Mostra coladas, vagas numeradas, brilhantes douradas, "x2" nas repetidas | ✅ OK |
+| 20 | Quem é: chutar outro jogador do álbum | Pistas de país e setor (verde = igual) | ✅ OK ("Messi" num desafio do Cristiano → "Ataque = mesmo setor") |
+| 21 | Filtros: escolher Sobrevivência | Filtros aparecem e o botão vira "INICIAR SOBREVIVÊNCIA" | ✅ OK |
+| 22 | Configurações: desligar o som | Sem efeitos sonoros até religar | ✅ OK |
 | 18 | Passar fase nível 3 da campanha | Pacotinho com 3 figurinhas, 1 brilhante | |
 | 19 | Vencer PvP | Pacotinho com 3 figurinhas para o vencedor e 1 para o outro | |
 
-**Testes automatizados:** `npm test`, com 23 testes (trilha, aprovação, dificuldade progressiva, pontuação, streak, placar PvP, chute do "Quem é", recompensas e pacotinhos, validação da saída do LLM, anti-alucinação das dicas, fallback para cache e pistas curadas, 404/422/503).
+**Testes automatizados:** `npm test`, com 24 testes, também rodando no GitHub Actions a cada push (trilha, aprovação, dificuldade progressiva, pontuação, streak, placar PvP, chute do "Quem é", recompensas e pacotinhos, validação da saída do LLM, anti-alucinação das dicas, fallback para cache e pistas curadas, 404/422/503).
 
 ## 6. Roteiro sugerido para o vídeo (≈4 min)
 1. Menu, mostrando que mascote e fundo vieram do Gemini (CP4).

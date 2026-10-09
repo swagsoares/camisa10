@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import JOGADORES from '../api/jogadores.json'
 import { api, som, supabase } from './lib'
-import { CHUTES_MAX, acertouJogador, blurFoto, pontosQuemE } from './logic'
+import { CHUTES_MAX, acertouJogador, blurFoto, comparar, pontosQuemE, setor } from './logic'
 
 const RODADAS = 5
 const sortear = () => [...JOGADORES].sort(() => Math.random() - 0.5).slice(0, RODADAS)
@@ -19,6 +19,7 @@ export default function QuemE({ aoGanhar, aoSair, nome, setNome, verRanking }) {
   const [tremer, setTremer] = useState(false)
   const [temCaricatura, setTemCaricatura] = useState(true)
   const [salvou, setSalvou] = useState(false)
+  const [chutes, setChutes] = useState([]) // chutes errados que são jogadores do jogo -> viram pistas
   const j = fila[idx]
 
   useEffect(() => {
@@ -36,6 +37,8 @@ export default function QuemE({ aoGanhar, aoSair, nome, setNome, verRanking }) {
       setPlacar((p) => ({ pontos: p.pontos + pontosQuemE(erros), acertos: p.acertos + 1 }))
       aoGanhar([{ id: j.id, brilhante: erros <= 1 }]) // acertou rápido = figurinha brilhante
     } else {
+      const outro = JOGADORES.find((x) => x.id !== j.id && acertouJogador(chute, x))
+      setChutes((c) => [...c, outro ? { ...outro, ...comparar(outro, j) } : { nome: chute.trim() }])
       som('erro')
       setTremer(true)
       setTimeout(() => setTremer(false), 400)
@@ -48,6 +51,7 @@ export default function QuemE({ aoGanhar, aoSair, nome, setNome, verRanking }) {
   function proximo() {
     setIdx(idx + 1)
     setErros(0)
+    setChutes([])
     setStatus('jogando')
   }
 
@@ -111,6 +115,21 @@ export default function QuemE({ aoGanhar, aoSair, nome, setNome, verRanking }) {
             <ol className="lista-dicas">
               {dicas.dicas.map((d, i) => <li key={i} className={i < reveladas ? 'aberta' : ''}>{i < reveladas ? d : '🔒 Erre um chute para liberar'}</li>)}
             </ol>
+          )}
+          {chutes.length > 0 && (
+            <ul className="chutes">
+              {chutes.map((c, i) => (
+                <li key={i}>
+                  <span className="chute-nome">❌ {c.nome}</span>
+                  {c.pais !== undefined ? (
+                    <>
+                      <span className={`pista ${c.pais ? 'sim' : 'nao'}`}>{c.bandeira} {c.pais ? 'mesmo país' : 'outro país'}</span>
+                      <span className={`pista ${c.setor ? 'sim' : 'nao'}`}>{setor(c.posicao)} {c.setor ? '= mesmo setor' : '≠ outro setor'}</span>
+                    </>
+                  ) : <span className="pista neutra">fora do álbum, sem comparação</span>}
+                </li>
+              ))}
+            </ul>
           )}
           {fim ? (
             <div className={`feedback ${status === 'acertou' ? 'ok' : 'nok'}`}>

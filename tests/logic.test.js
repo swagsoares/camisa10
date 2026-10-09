@@ -84,3 +84,16 @@ test('figurinhas: pacote e colagem marcam novas, repetidas e brilhantes', () => 
   assert.deepEqual(resultado.map((f) => f.nova), [true, true, false])
   assert.deepEqual(colecao.a, { qtd: 2, brilhante: true })
 })
+
+import { setor, comparar } from '../src/logic.js'
+
+test('quem é: comparação por país e setor (estilo Who Are Ya)', () => {
+  assert.equal(setor('Centroavante'), 'Ataque')
+  assert.equal(setor('Meia-atacante'), 'Meio-campo')
+  assert.equal(setor('Lateral-direito'), 'Defesa')
+  assert.equal(setor('Zagueiro (líbero)'), 'Defesa')
+  assert.equal(setor('Goleiro'), 'Goleiro')
+  const maradona = { pais: 'Argentina', posicao: 'Meia-atacante' }
+  assert.deepEqual(comparar({ pais: 'Argentina', posicao: 'Atacante' }, maradona), { pais: true, setor: false })
+  assert.deepEqual(comparar({ pais: 'Brasil', posicao: 'Meia' }, maradona), { pais: false, setor: true })
+})
