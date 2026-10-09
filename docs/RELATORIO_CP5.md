@@ -121,29 +121,29 @@
 | Tela 3 — Seleção de modo e filtros | Filtros (categoria, dificuldade) à esquerda e modo à direita; botão "Iniciar partida" dentro dos filtros | Mesmos elementos, reordenados: 1. modo (com descrição) → 2. filtros → botão "Iniciar <modo>"; + seção Configurações (nome, som, apagar progresso) | No celular, o botão "Iniciar" aparecia **antes** da escolha de modo (a coluna da direita caía para baixo) e não ficava claro qual modo estava escolhido. Os filtros também apareciam na Campanha, onde não valem (a trilha define tema e nível). E o mockup chamava a tela de "Filtros e **Configurações**", mas não existia nenhuma configuração; a seção nova cumpre esse nome. |
 | "Quem é esse jogador?" — revelação da caricatura | (modo novo) | Caricatura começa em **silhueta**, fica colorida e borrada no 2º erro e nítida no 3º (estilo "Quem é esse Pokémon?") | Nos testes, a caricatura nítida entregava a resposta logo de cara e o modo ficava fácil demais. Agora ela revela aos poucos, como a foto. |
 
-## 5. Checklist de testes manuais — ✍️ preencher jogando
+## 5. Checklist de testes manuais
 
 | # | Mecânica / tela | Resultado esperado | Resultado obtido |
 |---|---|---|---|
 | 1 | Menu → "JOGAR (Campanha)" | Abre a trilha com só a fase 1 liberada | ✅ OK |
-| 2 | Fase 1 com 3+ acertos | Fase marcada com ★ e fase 2 liberada | |
+| 2 | Fase 1 com 3+ acertos | Fase marcada com ★ e fase 2 liberada | ✅ OK (no vídeo: fase 1 concluída e fase 2 liberada) |
 | 3 | Fase com menos de 3 acertos | "Quase lá!" e fase seguinte continua trancada | ✅ OK (1/5 → "Quase lá!") |
 | 4 | Selo da pergunta | 🤖 "Gerada agora pela IA" | ✅ OK |
 | 5 | LLM fora (chave inválida no `.env`) | Pergunta vem com selo 📦 cache, sem travar | ✅ OK (5/5 do cache em 3,9 s) |
 | 6 | Sobrevivência: deixar o tempo zerar | "Tempo esgotado!" e fim de jogo | ✅ OK |
-| 7 | Sobrevivência: 3 acertos seguidos | Dificuldade sobe (perguntas mais difíceis) | |
+| 7 | Sobrevivência: 3 acertos seguidos | Dificuldade sobe (perguntas mais difíceis) | ✅ OK (testado pelo grupo) |
 | 8 | Salvar no ranking | Nome aparece no Ranking global | ✅ OK |
 | 9 | PvP: criar sala em um navegador e entrar com o código em outro | Os dois aparecem no lobby | ✅ OK |
 | 10 | PvP: anfitrião clica "Começar" | Os dois recebem as mesmas perguntas | ✅ OK |
 | 11 | PvP: os dois terminam | Placar ao vivo com o vencedor 🏆 | ✅ OK (atualizou sem recarregar) |
-| 12 | Filtros: Estatísticas + Difícil + Sobrevivência | Perguntas só dessa categoria | |
+| 12 | Filtros: Estatísticas + Difícil + Sobrevivência | Perguntas só dessa categoria | ✅ OK (testado pelo grupo) |
 | 13 | Celular (tela estreita) | Layout em 1 coluna, jogável | ✅ OK (375px: menu e gameplay sem rolagem lateral) |
 | 14 | Quem é: chute errado | Foto clareia, nova dica abre, valor cai 200 pts | ✅ OK (blur 28px → 13px após 2 erros) |
 | 15 | Quem é: chute certo ("haaland" minúsculo e sem acento) | "Golaço!", pacotinho com a figurinha NOVA | ✅ OK |
 | 16 | Quem é: IA fora do ar | Dicas com selo "dicas do grupo" | ✅ (teste automatizado) |
 | 17 | Álbum | Mostra coladas, vagas numeradas, brilhantes douradas, "x2" nas repetidas | ✅ OK |
-| 18 | Passar fase nível 3 da campanha | Pacotinho com 3 figurinhas, 1 brilhante | |
-| 19 | Vencer PvP | Pacotinho com 3 figurinhas para o vencedor e 1 para o outro | |
+| 18 | Passar fase nível 3 da campanha | Pacotinho com 3 figurinhas, 1 brilhante | ✅ OK (testado pelo grupo) |
+| 19 | Vencer PvP | Pacotinho com 3 figurinhas para o vencedor e 1 para o outro | ✅ OK (no vídeo: vencedor ganhou 3 figurinhas, o outro 1) |
 | 20 | Quem é: chutar outro jogador do álbum | Pistas de país e setor (verde = igual) | ✅ OK ("Messi" num desafio do Cristiano → "Ataque = mesmo setor") |
 | 21 | Filtros: escolher Sobrevivência | Filtros aparecem e o botão vira "INICIAR SOBREVIVÊNCIA" | ✅ OK |
 | 22 | Configurações: desligar o som | Sem efeitos sonoros até religar | ✅ OK |
