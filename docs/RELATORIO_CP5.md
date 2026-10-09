@@ -97,8 +97,13 @@
 - Validar as respostas no servidor (hoje ficam no navegador, então dá para trapacear pelo DevTools no PvP e no "Quem é") e conferir pontuações antes de gravar no ranking.
 - Login (Supabase Auth) para sincronizar álbum e progresso entre aparelhos. — ✍️ (ex.: ajuste de dificuldade/visual depois de jogar)
 
-### 3.2 Como o código funciona — ✍️ TEXTO DO GRUPO (não gerado por IA)
-> Escrevam com as próprias palavras. Roteiro sugerido: (1) o que acontece quando o jogador clica em "Iniciar partida" até a pergunta aparecer (`Partida` → `api('perguntas')` → `montar_lote` → `gerar` → `chamar_llm` → `normalizar`); (2) como o fallback decide usar o cache; (3) como o `Quiz.jsx` faz o prefetch e o timer; (4) como o PvP usa Presence, Broadcast e Postgres Changes; (5) por que a validação Pydantic existe.
+### 3.2 Como o código funciona (texto do grupo)
+
+**Do clique até a pergunta.** Quando o jogador clica em "Iniciar", o front-end em React pede as perguntas ao backend. A gente busca os fatos no Supabase e envia para a IA gerar a pergunta e as quatro alternativas. O Pydantic valida tudo e embaralhamos as alternativas, porque a resposta certa sempre aparecia primeiro.
+
+**Quando a IA dá problema.** Se a Groq estourar a cota, tentamos outro modelo, o gpt-oss. Se falhar, usamos perguntas guardadas em cache. No "Quem é", barramos dicas inventadas. Aconteceu com o Zico: a IA disse que ele foi campeão na Udinese, mas ele só jogou lá.
+
+**O PvP.** Quem cria a sala recebe um código de quatro letras, e as cinco perguntas ficam salvas no Supabase. O Realtime sincroniza os jogadores e o placar. Ganha quem fizer mais pontos, e responder mais rápido vale mais.
 
 ## 4. Diário de Mudanças em relação à CP4
 
