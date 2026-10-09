@@ -5,7 +5,7 @@
 ## 1. Entrega
 - Jogo online: https://camisa10-three.vercel.app
 - Repositório: https://github.com/swagsoares/camisa10
-- Vídeo (2–5 min): `LINK`
+- Vídeo (4min55s): https://youtu.be/8FruwyaFvoY
 
 ## 2. Continuidade com a CP4
 

@@ -4,7 +4,7 @@
 
 Quiz de futebol com progressão estilo Duolingo, **PvP online** estilo Kahoot, **modo sobrevivência**, **"Quem é esse jogador?"** e **álbum de figurinhas**, com perguntas geradas em tempo real por IA (LLM de pesos abertos: Qwen 3.8 via Groq, ou Llama/Qwen local via Ollama) a partir de uma base de fatos curada (RAG).
 
-📦 **Repositório:** https://github.com/swagsoares/camisa10 · 🎮 **Jogar online: https://camisa10-three.vercel.app** · 🎬 **Vídeo:** `LINK_DO_VIDEO` · 📄 **Relatório CP5:** [docs/RELATORIO_CP5.md](docs/RELATORIO_CP5.md)
+📦 **Repositório:** https://github.com/swagsoares/camisa10 · 🎮 **Jogar online: https://camisa10-three.vercel.app** · 🎬 **Vídeo:** https://youtu.be/8FruwyaFvoY · 📄 **Relatório CP5:** [docs/RELATORIO_CP5.md](docs/RELATORIO_CP5.md)
 
 Grupo: Vitor Soares Gonçalves (RM 566181) · Pietro Boroto (RM 562407)
 
