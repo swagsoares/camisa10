@@ -3,8 +3,8 @@
 > ⚠️ **RASCUNHO.** Partes marcadas com ✍️ precisam ser escritas/conferidas pelo grupo. O professor exige que a seção 3.2 seja texto próprio, não gerado por IA.
 
 ## 1. Entrega
-- Jogo online: `https://SEU-PROJETO.vercel.app`
-- Repositório: `https://github.com/...`
+- Jogo online: https://camisa10-three.vercel.app
+- Repositório: https://github.com/swagsoares/camisa10
 - Vídeo (2–5 min): `LINK`
 
 ## 2. Continuidade com a CP4
@@ -85,6 +85,12 @@
 - **O que o grupo decidiu ou rejeitou:** das 4 ideias tiradas dos apps parecidos (pistas por comparação, desafio diário, ajuda 50/50, compartilhar resultado), implementamos **só as pistas por comparação**, que melhoram um modo existente sem criar tela nova. As outras ficaram como trabalhos futuros, para não inflar o escopo, o vídeo de 5 minutos e o código que precisamos saber explicar.
 - **Também entrou:** CI no GitHub Actions (os testes rodam a cada push) e ranking do "Quem é esse jogador?".
 
+### Prompt 7 — Deploy na Vercel
+- **Pedido:** "só falta o deploy no vercel, consegue me ajudar".
+- **O que a IA gerou:** o passo a passo do deploy; o grupo fez o login e cadastrou as variáveis no painel. Depois, a IA testou o site publicado: `/api/saude` (banco ok), perguntas e dicas geradas pela IA, ranking, caricaturas e criação de sala PvP com lobby em tempo real.
+- **Ajustes durante o deploy:** a Vercel sugeriu adicionar a integração do Supabase, o que **recusamos**, porque ela criaria um banco novo com outras variáveis. A Vercel também alertou que variáveis `VITE_` ficam expostas no navegador, o que é **intencional** para a URL e a chave *anon* (pública, protegida pelo RLS); a chave *service* ficou sem o prefixo. Na primeira tentativa de salvar, as variáveis duplicaram e precisamos limpar o formulário.
+- **Alucinação encontrada só em produção:** a dica do Zico dizia "Conquistou títulos na Udinese e no Kashima", mas a pista era apenas "Jogou na Udinese...". A validação por números não pegava esse caso. Criamos uma regra por **grupos de sinônimos**: palavras de conquista (título, campeão, venceu, recorde, artilheiro) só podem aparecer se a pista já fala daquele tipo de feito ("ganhou" libera "conquistou"; "maior artilheiro" libera "recorde"). Revalidamos o cache: 4 de 48 versões foram reprovadas (entre elas "recordes de gol" para o Romário e "ex-campeão do Palmeiras" para o Roberto Carlos, nenhuma presente nas pistas) e foram regeneradas. Teste de regressão: `test_dica_que_inventa_conquista_e_barrada`.
+
 ## 3.3 Trabalhos futuros
 - Desafio diário ("jogador do dia", igual para todos) com sequência de dias, estilo Wordle e FootyIQ.
 - Ajuda 50/50 no quiz (power-up estilo Kahoot e Duolingo) e compartilhar o resultado com emojis.
@@ -134,7 +140,7 @@
 | 18 | Passar fase nível 3 da campanha | Pacotinho com 3 figurinhas, 1 brilhante | |
 | 19 | Vencer PvP | Pacotinho com 3 figurinhas para o vencedor e 1 para o outro | |
 
-**Testes automatizados:** `npm test`, com 24 testes, também rodando no GitHub Actions a cada push (trilha, aprovação, dificuldade progressiva, pontuação, streak, placar PvP, chute do "Quem é", recompensas e pacotinhos, validação da saída do LLM, anti-alucinação das dicas, fallback para cache e pistas curadas, 404/422/503).
+**Testes automatizados:** `npm test`, com 25 testes, também rodando no GitHub Actions a cada push (trilha, aprovação, dificuldade progressiva, pontuação, streak, placar PvP, chute do "Quem é", recompensas e pacotinhos, validação da saída do LLM, anti-alucinação das dicas, fallback para cache e pistas curadas, 404/422/503).
 
 ## 6. Roteiro sugerido para o vídeo (≈4 min)
 1. Menu, mostrando que mascote e fundo vieram do Gemini (CP4).

@@ -174,6 +174,17 @@ Regras:
 Responda SOMENTE em JSON: {"dicas": [str, str, str, str, str]}"""
 
 NUMEROS = re.compile(r"\d+")
+# Palavras de conquista: se a dica usa uma e a pista não fala daquele tipo de feito, a IA inventou
+# ("Jogou na Udinese" -> "Conquistou títulos na Udinese"). Sinônimos valem: "ganhou" libera "conquistou".
+CONQUISTAS = [
+    (("titul", "campe", "conquist", "venc"), ("ganh", "conquist", "venc", "campe", "titul", "levant")),
+    (("recorde", "artilheir"), ("recorde", "artilheir", "maior", "unico")),
+]
+
+
+def inventou_conquista(dica: str, pista: str) -> bool:
+    d, p = sem_acento(dica), sem_acento(pista)
+    return any(any(g in d for g in gatilhos) and not any(a in p for a in aceitos) for gatilhos, aceitos in CONQUISTAS)
 
 
 def sem_acento(t: str) -> str:
@@ -200,7 +211,8 @@ def dicas_validas(dicas, jogador: dict) -> bool:
     return (isinstance(dicas, list) and len(dicas) == 5
             and all(isinstance(d, str) and d.strip() for d in dicas)
             and not any(revela_nome(d, jogador) for d in dicas)
-            and all(set(NUMEROS.findall(d)) <= set(NUMEROS.findall(p)) for d, p in zip(dicas, jogador["pistas"])))
+            and all(set(NUMEROS.findall(d)) <= set(NUMEROS.findall(p)) and not inventou_conquista(d, p)
+                    for d, p in zip(dicas, jogador["pistas"])))
 
 
 async def gerar_dicas(jogador: dict) -> dict:

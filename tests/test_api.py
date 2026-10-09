@@ -120,3 +120,12 @@ def test_pistas_curadas_nao_revelam_o_nome():
     for j in m.JOGADORES.values():
         assert len(j["pistas"]) == 5, j["id"]
         assert not any(m.revela_nome(p, j) for p in j["pistas"]), j["id"]
+
+
+def test_dica_que_inventa_conquista_e_barrada():
+    # Caso real do deploy: a pista dizia "Jogou na Udinese" e a IA escreveu "Conquistou títulos na Udinese".
+    assert m.inventou_conquista("Conquistou títulos na Udinese.", "Jogou na Udinese, da Itália.")
+    assert m.inventou_conquista("Dono de recordes de gol.", "Formou dupla com Bebeto.")
+    # Sinônimo de algo que a pista já diz é permitido.
+    assert not m.inventou_conquista("Conquistou a Bola de Ouro de 2005.", "Ganhou a Bola de Ouro de 2005.")
+    assert not m.inventou_conquista("Detém o recorde da Liga dos Campeões.", "É o maior artilheiro da Liga dos Campeões.")

@@ -4,7 +4,7 @@
 
 Quiz de futebol com progressão estilo Duolingo, **PvP online** estilo Kahoot, **modo sobrevivência**, **"Quem é esse jogador?"** e **álbum de figurinhas**, com perguntas geradas em tempo real por IA (LLM de pesos abertos: Qwen 3.8 via Groq, ou Llama/Qwen local via Ollama) a partir de uma base de fatos curada (RAG).
 
-📦 **Repositório:** https://github.com/swagsoares/camisa10 · 🎮 **Jogar online:** `https://SEU-PROJETO.vercel.app` · 🎬 **Vídeo:** `LINK_DO_VIDEO` · 📄 **Relatório CP5:** [docs/RELATORIO_CP5.md](docs/RELATORIO_CP5.md)
+📦 **Repositório:** https://github.com/swagsoares/camisa10 · 🎮 **Jogar online: https://camisa10-three.vercel.app** · 🎬 **Vídeo:** `LINK_DO_VIDEO` · 📄 **Relatório CP5:** [docs/RELATORIO_CP5.md](docs/RELATORIO_CP5.md)
 
 Grupo: Vitor Soares Gonçalves (RM 566181) · Pietro Boroto (RM 562407)
 
@@ -39,7 +39,7 @@ React (Vite) ──/api──► FastAPI (Vercel Python) ──► Qwen 3.8 27B 
 
 **Configurações:** nome do jogador, som liga/desliga e apagar progresso (tela "Filtros e Configurações").
 
-**Robustez da IA:** lista de modelos com reserva (`LLM_MODEL=principal,reserva`): se a cota da Groq estoura (HTTP 429), tenta o próximo modelo; se todos falham, usa o cache, que é **pré-gerado pela IA** (`scripts/aquece_cache.py`: 2+ perguntas por fato e 2 versões de dicas por jogador). Um cron diário da Vercel (`/api/saude`) mantém o Supabase gratuito ativo. As dicas passam por validação anti-alucinação (não podem citar o nome nem números que não estão na pista).
+**Robustez da IA:** lista de modelos com reserva (`LLM_MODEL=principal,reserva`): se a cota da Groq estoura (HTTP 429), tenta o próximo modelo; se todos falham, usa o cache, que é **pré-gerado pela IA** (`scripts/aquece_cache.py`: 2+ perguntas por fato e 2 versões de dicas por jogador). Um cron diário da Vercel (`/api/saude`) mantém o Supabase gratuito ativo. As dicas passam por validação anti-alucinação: não podem citar o nome, números que não estão na pista nem conquistas que a pista não menciona ("jogou na Udinese" não pode virar "conquistou títulos na Udinese").
 
 ## Como rodar localmente
 
