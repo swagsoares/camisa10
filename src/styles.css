@@ -110,9 +110,10 @@ input { font: inherit; padding: .7rem 1rem; border-radius: 10px; border: 2px sol
 .placar li { display: flex; justify-content: space-between; gap: 1rem; background: #2a2a2a; padding: .7rem 1rem; border-radius: 10px; }
 .placar li.lider { background: var(--amarelo); color: #222; font-weight: 800; }
 
+@media (max-width: 900px) { .mascote-ajudante { display: none; } }
 @media (max-width: 720px) {
   .filtros-corpo, .alternativas { grid-template-columns: 1fr; }
   .hud { grid-template-columns: 1fr auto; } .hud-centro { grid-column: 1 / -1; grid-row: 2; }
   .menu-corpo { flex-direction: column-reverse; } .mascote { width: 160px; }
-  .mascote-ajudante { width: 64px; } .cartao-pergunta { padding: 1.2rem; }
+  .cartao-pergunta { padding: 1.2rem; }
 }

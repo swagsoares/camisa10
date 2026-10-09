@@ -30,6 +30,8 @@ e deve transformar esse fato numa pergunta de quiz, no FORMATO pedido, sem inven
 informação além do fato fornecido. Escreva em português do Brasil.
 Regras:
 - multipla_escolha: exatamente 4 alternativas curtas e diferentes entre si, só 1 correta, distratores plausíveis.
+- As 4 alternativas devem ser do MESMO TIPO e responder diretamente à pergunta (ex.: 4 anos, 4 países, 4 jogadores)
+  e ter tamanho parecido: a correta não pode ser a mais longa nem a mais detalhada.
 - verdadeiro_falso: alternativas ["Verdadeiro","Falso"]; você pode afirmar o fato ou uma versão alterada dele.
 - resposta_correta deve ser idêntica a uma das alternativas.
 - DIFICULDADE 1 = pergunta direta; 3 = exige detalhe (ano, número, nome).
@@ -85,7 +87,9 @@ async def chamar_llm(fato: str, formato: str, dificuldade: int) -> dict:
 
 async def sb(metodo: str, caminho: str, **kw):
     """Chamada mínima ao PostgREST do Supabase com a service key (só no servidor)."""
-    h = {"apikey": SUPABASE_SERVICE_KEY, "Authorization": f"Bearer {SUPABASE_SERVICE_KEY}"}
+    h = {"apikey": SUPABASE_SERVICE_KEY}
+    if not SUPABASE_SERVICE_KEY.startswith("sb_"):  # chaves antigas (JWT) também vão no Authorization
+        h["Authorization"] = f"Bearer {SUPABASE_SERVICE_KEY}"
     async with httpx.AsyncClient(timeout=10) as c:
         r = await c.request(metodo, f"{SUPABASE_URL}/rest/v1/{caminho}", headers=h, **kw)
         r.raise_for_status()

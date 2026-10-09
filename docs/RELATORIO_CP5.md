@@ -52,11 +52,17 @@
 - **O que a IA gerou:** criou o `.env` (ignorado pelo git) e testou a chave listando os modelos. Descobriu que a Groq **não oferece mais o Llama de chat**. Fez um teste comparativo entre `openai/gpt-oss-20b` e `qwen/qwen3.8-27b` com 4 fatos reais da base.
 - **O que o grupo decidiu ou ajustou:** adotou o Qwen 3.8 27B como padrão (resultado do teste na seção 4); o selo do jogo deixou de citar "Llama" e o Diário de Mudanças ganhou uma linha nova.
 
-### Prompt 4 — ✍️ (ex.: configuração do Supabase e primeiro deploy)
-- Pedido / O que a IA gerou / O que ajustamos:
+### Prompt 4 — Conectar o Supabase e testar o jogo inteiro
+- **Pedido:** "eu rodei os 2 já no supabase" e, em seguida, o envio das chaves do projeto.
+- **O que a IA gerou:** preencheu o `.env`, conferiu as tabelas e o RLS pela API (a chave pública não enxerga `facts` nem `questions`), subiu backend e frontend e jogou no navegador: uma fase da campanha, a sobrevivência até o tempo esgotar com gravação no ranking, e o PvP com duas abas (Ana × Beto), com lobby, início sincronizado e placar ao vivo. Também simulou a IA fora do ar.
+- **Problemas encontrados e corrigidos:**
+  1. **Base de fatos pequena:** cada categoria/nível tinha só 4 fatos, mas uma fase pede 5 perguntas, e o lote voltava com 4. Ampliamos para 6 fatos por célula (72 no total).
+  2. **Alternativas incoerentes:** a IA gerou "Como devem ser posicionadas as mãos no arremesso lateral?" com a alternativa "Com os pés", e a resposta certa continuava sendo a mais longa. Acrescentamos ao prompt que as 4 alternativas devem ser do mesmo tipo, responder à pergunta e ter tamanho parecido. No reteste vieram 4 anos, 4 intervalos em metros, 4 seleções etc.
+  3. **Mascote cobrindo a alternativa A** em telas estreitas: escondido abaixo de 900px.
+  4. **Chaves novas do Supabase (`sb_secret_`)** não são JWT e não podem ir no header `Authorization`; o backend passou a mandar só `apikey` nesse caso.
 
-### Prompt 5 — ✍️ (ex.: bug encontrado jogando o PvP com dois navegadores)
-### Prompt 6 — ✍️ (ex.: ajuste de dificuldade/visual depois de jogar)
+### Prompt 5 — ✍️ (ex.: publicar no GitHub e na Vercel)
+### Prompt 6 — ✍️ (ex.: ajuste depois de vocês jogarem) — ✍️ (ex.: ajuste de dificuldade/visual depois de jogar)
 
 ### 3.2 Como o código funciona — ✍️ TEXTO DO GRUPO (não gerado por IA)
 > Escrevam com as próprias palavras. Roteiro sugerido: (1) o que acontece quando o jogador clica em "Iniciar partida" até a pergunta aparecer (`Partida` → `api('perguntas')` → `montar_lote` → `gerar` → `chamar_llm` → `normalizar`); (2) como o fallback decide usar o cache; (3) como o `Quiz.jsx` faz o prefetch e o timer; (4) como o PvP usa Presence, Broadcast e Postgres Changes; (5) por que a validação Pydantic existe.
@@ -76,17 +82,17 @@
 
 | # | Mecânica / tela | Resultado esperado | Resultado obtido |
 |---|---|---|---|
-| 1 | Menu → "JOGAR (Campanha)" | Abre a trilha com só a fase 1 liberada | |
+| 1 | Menu → "JOGAR (Campanha)" | Abre a trilha com só a fase 1 liberada | ✅ OK |
 | 2 | Fase 1 com 3+ acertos | Fase marcada com ★ e fase 2 liberada | |
-| 3 | Fase com menos de 3 acertos | "Quase lá!" e fase seguinte continua trancada | |
-| 4 | Selo da pergunta | 🤖 "Gerada agora pela IA" | |
-| 5 | LLM fora (chave inválida no `.env`) | Pergunta vem com selo 📦 cache, sem travar | |
-| 6 | Sobrevivência: deixar o tempo zerar | "Tempo esgotado!" e fim de jogo | |
+| 3 | Fase com menos de 3 acertos | "Quase lá!" e fase seguinte continua trancada | ✅ OK (1/5 → "Quase lá!") |
+| 4 | Selo da pergunta | 🤖 "Gerada agora pela IA" | ✅ OK |
+| 5 | LLM fora (chave inválida no `.env`) | Pergunta vem com selo 📦 cache, sem travar | ✅ OK (5/5 do cache em 3,9 s) |
+| 6 | Sobrevivência: deixar o tempo zerar | "Tempo esgotado!" e fim de jogo | ✅ OK |
 | 7 | Sobrevivência: 3 acertos seguidos | Dificuldade sobe (perguntas mais difíceis) | |
-| 8 | Salvar no ranking | Nome aparece no Ranking global | |
-| 9 | PvP: criar sala em um navegador e entrar com o código em outro | Os dois aparecem no lobby | |
-| 10 | PvP: anfitrião clica "Começar" | Os dois recebem as mesmas perguntas | |
-| 11 | PvP: os dois terminam | Placar ao vivo com o vencedor 🏆 | |
+| 8 | Salvar no ranking | Nome aparece no Ranking global | ✅ OK |
+| 9 | PvP: criar sala em um navegador e entrar com o código em outro | Os dois aparecem no lobby | ✅ OK |
+| 10 | PvP: anfitrião clica "Começar" | Os dois recebem as mesmas perguntas | ✅ OK |
+| 11 | PvP: os dois terminam | Placar ao vivo com o vencedor 🏆 | ✅ OK (atualizou sem recarregar) |
 | 12 | Filtros: Estatísticas + Difícil + Sobrevivência | Perguntas só dessa categoria | |
 | 13 | Celular (tela estreita) | Layout em 1 coluna, jogável | |
 
