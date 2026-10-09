@@ -8,7 +8,10 @@ import asyncio
 import json
 import os
 import random
+import re
 import string
+import unicodedata
+from pathlib import Path
 
 import httpx
 from fastapi import FastAPI, HTTPException
@@ -16,7 +19,9 @@ from pydantic import BaseModel, Field, ValidationError, model_validator
 
 LLM_BASE_URL = os.getenv("LLM_BASE_URL", "https://api.groq.com/openai/v1")
 LLM_API_KEY = os.getenv("LLM_API_KEY", "")
-LLM_MODEL = os.getenv("LLM_MODEL", "qwen/qwen3.8-27b")
+# Lista separada por vírgula: o 1º é o principal; os outros são reserva quando o anterior falha (ex.: 429 por cota).
+LLM_MODELS = [m.strip() for m in os.getenv("LLM_MODEL", "qwen/qwen3.8-27b,openai/gpt-oss-20b").split(",") if m.strip()]
+LLM_MODEL = LLM_MODELS[0]
 LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "20"))  # Ollama em CPU precisa de mais (ex.: 120)
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
@@ -68,21 +73,32 @@ def normalizar(bruto: dict, formato: str) -> Pergunta:
     return p
 
 
-async def chamar_llm(fato: str, formato: str, dificuldade: int) -> dict:
-    usuario = f"FATO: {fato}\nFORMATO: {formato}\nDIFICULDADE: {dificuldade}"
+async def llm_json(sistema: str, usuario: str, max_tokens: int, temperatura: float = 0.7) -> dict:
+    """Chama o LLM em JSON mode, passando para o próximo modelo da lista se um falhar."""
+    erro = None
     async with httpx.AsyncClient(timeout=LLM_TIMEOUT) as c:
-        r = await c.post(
-            f"{LLM_BASE_URL}/chat/completions",
-            headers={"Authorization": f"Bearer {LLM_API_KEY or 'ollama'}"},  # Ollama ignora a chave, mas header vazio é inválido
-            json={
-                "model": LLM_MODEL,
-                "temperature": 0.7,
+        for modelo in LLM_MODELS:
+            corpo = {
+                "model": modelo,
+                "temperature": temperatura,
+                "max_tokens": max_tokens,  # sem isso a Groq reserva tokens demais e estoura a cota por minuto
                 "response_format": {"type": "json_object"},  # JSON mode (Groq e Ollama)
-                "messages": [{"role": "system", "content": PROMPT_SISTEMA}, {"role": "user", "content": usuario}],
-            },
-        )
-        r.raise_for_status()
-        return json.loads(r.json()["choices"][0]["message"]["content"])
+                "messages": [{"role": "system", "content": sistema}, {"role": "user", "content": usuario}],
+            }
+            if "gpt-oss" in modelo:
+                corpo["reasoning_effort"] = "low"  # modelo de raciocínio: pensa pouco, responde rápido
+            try:
+                r = await c.post(f"{LLM_BASE_URL}/chat/completions", json=corpo,
+                                 headers={"Authorization": f"Bearer {LLM_API_KEY or 'ollama'}"})  # header vazio é inválido
+                r.raise_for_status()
+                return json.loads(r.json()["choices"][0]["message"]["content"])
+            except (httpx.HTTPError, KeyError, json.JSONDecodeError) as e:
+                erro = e
+    raise erro
+
+
+async def chamar_llm(fato: str, formato: str, dificuldade: int) -> dict:
+    return await llm_json(PROMPT_SISTEMA, f"FATO: {fato}\nFORMATO: {formato}\nDIFICULDADE: {dificuldade}", 600)
 
 
 async def sb(metodo: str, caminho: str, **kw):
@@ -143,6 +159,59 @@ async def montar_lote(categoria: str | None, dificuldade: int, n: int, excluir: 
     return geradas
 
 
+# ---------- Modo "Quem é esse jogador?" ----------
+JOGADORES = {j["id"]: j for j in json.loads((Path(__file__).parent / "jogadores.json").read_text(encoding="utf8"))}
+
+PROMPT_DICAS = """Você é um narrador de futebol brasileiro animado apresentando o desafio "Quem é esse jogador?".
+Reescreva cada PISTA como uma dica curta e misteriosa, na mesma ordem (da mais difícil para a mais fácil).
+Regras:
+- Só mude o ESTILO. Não acrescente nenhum fato, número, título, ano ou qualificação ("bi", "tri",
+  "consecutivo", "histórico") que não esteja escrito na pista.
+- Escreva números em algarismos, exatamente como na pista.
+- NUNCA escreva o nome ou sobrenome do jogador. Máximo de 25 palavras por dica. Português do Brasil.
+Responda SOMENTE em JSON: {"dicas": [str, str, str, str, str]}"""
+
+NUMEROS = re.compile(r"\d+")
+
+
+def sem_acento(t: str) -> str:
+    return "".join(c for c in unicodedata.normalize("NFD", t.lower()) if unicodedata.category(c) != "Mn")
+
+
+def revela_nome(texto: str, jogador: dict) -> bool:
+    """True se o texto entrega o jogador (nome ou sobrenome como palavra inteira).
+    O apelido pode aparecer: ele é a última dica (a mais fácil) de propósito."""
+    alvo = f" {re.sub(r'[^a-z0-9]+', ' ', sem_acento(texto))} "
+    nomes = {jogador["nome"], *jogador["nome"].split()}
+    return any(f" {sem_acento(n)} " in alvo for n in nomes if len(n) > 2)
+
+
+async def chamar_llm_dicas(jogador: dict) -> list[str]:
+    pistas = "\n".join(f"{i + 1}. {p}" for i, p in enumerate(jogador["pistas"]))
+    usuario = f"JOGADOR (segredo, não revele): {jogador['nome']}\nPISTAS:\n{pistas}"
+    return (await llm_json(PROMPT_DICAS, usuario, 700, 0.5))["dicas"]
+
+
+def dicas_validas(dicas, jogador: dict) -> bool:
+    """Barra alucinação detectável: toda dica precisa existir, não revelar o nome
+    e não citar números que não estão na pista original (ex.: anos ou placares inventados)."""
+    return (isinstance(dicas, list) and len(dicas) == 5
+            and all(isinstance(d, str) and d.strip() for d in dicas)
+            and not any(revela_nome(d, jogador) for d in dicas)
+            and all(set(NUMEROS.findall(d)) <= set(NUMEROS.findall(p)) for d, p in zip(dicas, jogador["pistas"])))
+
+
+async def gerar_dicas(jogador: dict) -> dict:
+    for _ in range(2):
+        try:
+            dicas = await chamar_llm_dicas(jogador)
+            if dicas_validas(dicas, jogador):
+                return {"dicas": [d.strip() for d in dicas], "fonte": "ia"}
+        except (httpx.HTTPError, ValueError, KeyError, TypeError, json.JSONDecodeError):
+            pass
+    return {"dicas": jogador["pistas"], "fonte": "curadas"}  # fallback: pistas escritas pelo grupo
+
+
 app = FastAPI(title="Camisa 10 API")
 
 
@@ -179,6 +248,17 @@ async def criar_sala(req: PedidoPerguntas):
     raise HTTPException(500, "Não foi possível criar a sala")
 
 
+class PedidoDicas(BaseModel):
+    jogador: str
+
+
+@app.post("/api/dicas")
+async def dicas(req: PedidoDicas):
+    if req.jogador not in JOGADORES:
+        raise HTTPException(404, "Jogador desconhecido")
+    return await gerar_dicas(JOGADORES[req.jogador])
+
+
 @app.get("/api/saude")
 async def saude():
-    return {"ok": True, "modelo": LLM_MODEL, "llm": LLM_BASE_URL.split("/")[2]}
+    return {"ok": True, "modelos": LLM_MODELS, "llm": LLM_BASE_URL.split("/")[2]}

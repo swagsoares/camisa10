@@ -1,8 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import Quiz from './Quiz'
 import Pvp from './Pvp'
+import QuemE from './QuemE'
+import Album, { Pacote } from './Album'
+import JOGADORES from '../api/jogadores.json'
 import { api, salvo, som, supabase } from './lib'
-import { BLOCOS, FASES, NIVEIS, PERGUNTAS_POR_FASE, ACERTOS_PARA_PASSAR, dificuldadeSobrevivencia, faseAprovada, faseLiberada } from './logic'
+import { BLOCOS, FASES, NIVEIS, PERGUNTAS_POR_FASE, ACERTOS_PARA_PASSAR, dificuldadeSobrevivencia, faseAprovada, faseLiberada, recompensa, abrirPacote, colar } from './logic'
+
+const IDS = JOGADORES.map((j) => j.id)
 
 export default function App() {
   const [tela, setTela] = useState('menu')
@@ -11,10 +16,22 @@ export default function App() {
   const [nome, setNome] = useState(() => salvo.ler('nome', ''))
   const [partida, setPartida] = useState(null) // { tipo, fase?, ... }
   const [resultado, setResultado] = useState(null)
+  // ponytail: álbum fica no navegador (localStorage); sincronizar entre aparelhos exigiria login.
+  const [colecao, setColecao] = useState(() => salvo.ler('album', {}))
+  const [pacote, setPacote] = useState(null)
 
   useEffect(() => salvo.gravar('filtros', filtros), [filtros])
   useEffect(() => salvo.gravar('concluidas', concluidas), [concluidas])
   useEffect(() => salvo.gravar('nome', nome), [nome])
+  useEffect(() => salvo.gravar('album', colecao), [colecao])
+
+  function ganhar(figurinhas) {
+    if (!figurinhas.length) return
+    const r = colar(colecao, figurinhas)
+    setColecao(r.colecao)
+    setPacote(r.resultado)
+  }
+  const ganharPacote = (premio) => ganhar(abrirPacote(IDS, premio))
 
   const ir = (t) => setTela(t)
   const jogarFase = (fase) => { setPartida({ id: Date.now(), tipo: 'campanha', fase }); ir('jogo') }
@@ -30,13 +47,16 @@ export default function App() {
     som('fim')
     if (partida.tipo === 'campanha' && faseAprovada(placar.acertos) && !concluidas.includes(partida.fase.id))
       setConcluidas([...concluidas, partida.fase.id])
+    ganharPacote(partida.tipo === 'campanha'
+      ? recompensa('campanha', { acertos: placar.acertos, dificuldade: partida.fase.dificuldade })
+      : recompensa('sobrevivencia', placar))
     setResultado({ ...placar, partida })
     ir('resultado')
   }
 
   return (
     <div className="app">
-      {tela === 'menu' && <Menu ir={ir} jogarSobrevivencia={jogarSobrevivencia} />}
+      {tela === 'menu' && <Menu ir={ir} jogarSobrevivencia={jogarSobrevivencia} coladas={Object.keys(colecao).length} />}
       {tela === 'filtros' && <Filtros filtros={filtros} setFiltros={setFiltros} iniciar={iniciarPelosFiltros} voltar={() => ir('menu')} />}
       {tela === 'trilha' && <Trilha concluidas={concluidas} jogar={jogarFase} voltar={() => ir('menu')} />}
       {tela === 'jogo' && <Partida key={partida.id} partida={partida} aoFim={fim} aoSair={() => ir('menu')} />}
@@ -46,12 +66,16 @@ export default function App() {
           repetir={() => (resultado.partida.tipo === 'campanha' ? jogarFase(resultado.partida.fase) : jogarSobrevivencia())} />
       )}
       {tela === 'ranking' && <Ranking voltar={() => ir('menu')} />}
-      {tela === 'pvp' && <Pvp filtros={filtros} nome={nome} setNome={setNome} aoSair={() => ir('menu')} />}
+      {tela === 'pvp' && <Pvp filtros={filtros} nome={nome} setNome={setNome} aoSair={() => ir('menu')}
+        aoTerminar={(venceu) => ganharPacote(recompensa('pvp', { venceu }))} />}
+      {tela === 'quem' && <QuemE aoGanhar={ganhar} aoSair={() => ir('menu')} />}
+      {tela === 'album' && <Album colecao={colecao} voltar={() => ir('menu')} />}
+      {pacote && <Pacote figurinhas={pacote} fechar={() => setPacote(null)} />}
     </div>
   )
 }
 
-function Menu({ ir, jogarSobrevivencia }) {
+function Menu({ ir, jogarSobrevivencia, coladas }) {
   return (
     <div className="tela menu">
       <div className="logo"><h1>CAMISA 10</h1><h2>A Trilha do Craque</h2></div>
@@ -60,8 +84,12 @@ function Menu({ ir, jogarSobrevivencia }) {
           <button className="btn verde grande" onClick={() => ir('trilha')}>JOGAR (Campanha)</button>
           <button className="btn azul grande" onClick={() => ir('pvp')}>MODO PVP</button>
           <button className="btn vermelho grande" onClick={jogarSobrevivencia}>MODO SOBREVIVÊNCIA</button>
+          <button className="btn amarelo grande" onClick={() => ir('quem')}>QUEM É ESSE JOGADOR?</button>
           <button className="btn cinza grande" onClick={() => ir('filtros')}>FILTROS E CONFIGURAÇÕES</button>
-          <button className="btn link" onClick={() => ir('ranking')}>🏆 Ranking global</button>
+          <div className="linha">
+            <button className="btn roxo" onClick={() => ir('album')}>🎴 Álbum ({coladas}/{IDS.length})</button>
+            <button className="btn roxo" onClick={() => ir('ranking')}>🏆 Ranking</button>
+          </div>
         </nav>
         <img className="mascote" src="/assets/mascote.png" alt="Mascote do Camisa 10" />
       </div>

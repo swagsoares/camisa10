@@ -5,7 +5,7 @@ import { BLOCOS, NIVEIS, ordenarPlacar } from './logic'
 
 // Modo PvP online (estilo Kahoot): mesmo lote de 5 perguntas para todos da sala.
 // Lobby via Supabase Realtime Presence; início via Broadcast; placar via Postgres Changes.
-export default function Pvp({ filtros, nome, setNome, aoSair }) {
+export default function Pvp({ filtros, nome, setNome, aoSair, aoTerminar }) {
   const [fase, setFase] = useState('entrada') // entrada | lobby | jogo | placar
   const [sala, setSala] = useState(null)
   const [anfitriao, setAnfitriao] = useState(false)
@@ -14,6 +14,15 @@ export default function Pvp({ filtros, nome, setNome, aoSair }) {
   const [codigo, setCodigo] = useState('')
   const [msg, setMsg] = useState('')
   const canal = useRef(null)
+  const premiado = useRef(false)
+  const [terminei, setTerminei] = useState(false)
+
+  // Placar fechado (todos da sala terminaram): figurinhas para todos, mais para o vencedor.
+  useEffect(() => {
+    if (!terminei || premiado.current || resultados.length < Math.max(2, jogadores.length)) return
+    premiado.current = true
+    aoTerminar(ordenarPlacar(resultados)[0].nome === nome)
+  }, [terminei, resultados, jogadores]) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function entrar(code, criou = false) {
     setMsg('Entrando na sala…')
@@ -56,6 +65,7 @@ export default function Pvp({ filtros, nome, setNome, aoSair }) {
   async function terminar(p) {
     som('fim')
     setFase('placar')
+    setTerminei(true)
     await supabase.from('room_results').insert({ code: sala.code, nome, acertos: p.acertos, pontos: p.pontos, tempo_ms: p.tempo_ms })
   }
 

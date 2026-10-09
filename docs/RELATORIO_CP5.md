@@ -23,6 +23,8 @@
 | IA imagem: mascote e fundo Gemini, fundo removido por thresholding | Sim, integrados ao jogo | ✅ |
 | Prefetch da próxima pergunta / lote na campanha | Sim | ✅ |
 | Extras: ranking global, pontuação por rapidez, sons, animações, fallback de IA | Novos (acréscimos, não mudanças) | ➕ |
+| Extra: modo "Quem é esse jogador?" (caricatura IA + foto que clareia + dicas IA) | Novo (acréscimo) | ➕ |
+| Extra: álbum de figurinhas com pacotinhos em todos os modos | Novo (acréscimo) | ➕ |
 
 ## 3. Diário de Vibe Coding
 
@@ -61,7 +63,18 @@
   3. **Mascote cobrindo a alternativa A** em telas estreitas: escondido abaixo de 900px.
   4. **Chaves novas do Supabase (`sb_secret_`)** não são JWT e não podem ir no header `Authorization`; o backend passou a mandar só `apikey` nesse caso.
 
-### Prompt 5 — ✍️ (ex.: publicar no GitHub e na Vercel)
+### Prompt 5 — GitHub + novos modos ("Quem é esse jogador?" e figurinhas)
+- **Pedido:** "pode criar sim o repositório [...] ver repositórios do github para ajudar [...] usar alguma ia de vídeo como 'quem é esse jogador' aí vem uma foto do ronaldinho com traços de famosos e aí com chutes vai ficando mais fácil [...] também um modo figurinha".
+- **O que a IA gerou:** criou o repositório público (antes, verificou que nenhuma chave estava no histórico do git); pesquisou no GitHub (pouca coisa útil, só a ideia de usar a carreira em clubes como dica); implementou os dois modos.
+- **O que foi rejeitado ou ajustado (decisão do grupo com a IA):**
+  1. **IA de vídeo e rosto do Ronaldinho misturado com o de outros famosos foram rejeitados.** Geradores de imagem bloqueiam pessoas reais, misturar rostos é na prática um deepfake publicado num site aberto, e vídeo seria uma modalidade nova fora da CP4. Escolhemos **as duas** alternativas propostas: caricatura cartoon só com traços icônicos (Gemini, mesma técnica da CP4) como primeira dica, e foto real com licença livre (Wikimedia Commons) que começa borrada e clareia a cada erro.
+  2. **Figurinhas:** o grupo pediu que *todos os modos* dessem recompensa, com mais figurinhas nos níveis mais altos da campanha.
+- **Problemas reais encontrados e corrigidos:**
+  1. **Alucinação nas dicas:** a IA escreveu que o Maradona foi "tricampeão mundial" (a Argentina tinha 2 títulos em 1986) e que os títulos do Napoli foram "consecutivos" (foram 1987 e 1990). Criamos a validação `dicas_validas`: a dica não pode conter números que não estão na pista nem o nome do jogador. O prompt também proíbe acrescentar qualificações como "bi", "tri" e "consecutivo", e a temperatura baixou de 0,8 para 0,5. Se falhar, o jogo usa as pistas escritas pelo grupo.
+  2. **Cota da Groq (HTTP 429):** a camada gratuita do Qwen limita a 1.000 tokens de saída por minuto, e a Groq reserva o `max_tokens` padrão a cada chamada. Passamos a definir `max_tokens` e criamos uma **lista de modelos com reserva**: estourou a cota do Qwen, tenta o gpt-oss-20b; se todos falharem, usa o cache.
+  3. **Tela branca em dev:** o proxy do Vite mandava `/api/jogadores.json` (importado pelo front) para o FastAPI. O proxy passou a ignorar `.json`.
+  4. **Bandeiras viravam letras ("NO", "BR")** no Chrome do Windows, que não tem emoji de bandeira. Resolvido com a fonte Noto Color Emoji.
+  5. **API da Wikipedia retornava 403** sem um User-Agent identificado (política de robôs da Wikimedia); usamos um com o link do repositório.
 ### Prompt 6 — ✍️ (ex.: ajuste depois de vocês jogarem) — ✍️ (ex.: ajuste de dificuldade/visual depois de jogar)
 
 ### 3.2 Como o código funciona — ✍️ TEXTO DO GRUPO (não gerado por IA)
@@ -77,6 +90,8 @@
 | Hospedagem do backend | Uvicorn local | FastAPI como função Python na **Vercel** (Uvicorn só em dev) | Mesmo motivo da publicação. O FastAPI e o Pydantic foram mantidos. |
 | PvP | "dois jogadores competem" (sem definir se local ou online) | Online, com código de sala (Supabase Realtime) | Detalhamento, não remoção: a CP4 citava o Kahoot como referência direta, e o Kahoot é multi-dispositivo. |
 | Formatos de pergunta | múltipla escolha e V/F | Iguais; V/F é mais frequente no nível 1 | Ajuste de balanceamento. |
+| Modelo único → lista com reserva | 1 modelo | `LLM_MODEL=qwen/qwen3.8-27b,openai/gpt-oss-20b` | Nos testes, a camada gratuita da Groq retornou 429 (cota de 1.000 tokens de saída/min do Qwen). Antes de mudar, limitamos `max_tokens`, o que reduziu a reserva mas não eliminou o risco com vários jogadores ao mesmo tempo. A reserva usa um modelo aberto com cota separada. **Impacto:** nenhum no formato das perguntas (mesma validação Pydantic). |
+| Novos modos: "Quem é esse jogador?" e álbum de figurinhas | Não existiam | Implementados | **Acréscimo**, não substituição: as 4 mecânicas da CP4 seguem intactas. Usam as mesmas modalidades de IA já planejadas: texto (LLM narra dicas a partir de pistas curadas, com a mesma lógica RAG) e imagem (caricaturas no Gemini, como o mascote). Uma ideia inicial de usar IA de vídeo e misturar rostos de famosos foi descartada por questões éticas e de direito de imagem; as fotos reais vêm da Wikimedia Commons, com licença livre e crédito. |
 
 ## 5. Checklist de testes manuais — ✍️ preencher jogando
 
@@ -95,13 +110,20 @@
 | 11 | PvP: os dois terminam | Placar ao vivo com o vencedor 🏆 | ✅ OK (atualizou sem recarregar) |
 | 12 | Filtros: Estatísticas + Difícil + Sobrevivência | Perguntas só dessa categoria | |
 | 13 | Celular (tela estreita) | Layout em 1 coluna, jogável | |
+| 14 | Quem é: chute errado | Foto clareia, nova dica abre, valor cai 200 pts | ✅ OK (blur 28px → 13px após 2 erros) |
+| 15 | Quem é: chute certo ("haaland" minúsculo e sem acento) | "Golaço!", pacotinho com a figurinha NOVA | ✅ OK |
+| 16 | Quem é: IA fora do ar | Dicas com selo "dicas do grupo" | ✅ (teste automatizado) |
+| 17 | Álbum | Mostra coladas, vagas numeradas, brilhantes douradas, "x2" nas repetidas | ✅ OK |
+| 18 | Passar fase nível 3 da campanha | Pacotinho com 3 figurinhas, 1 brilhante | |
+| 19 | Vencer PvP | Pacotinho com 3 figurinhas para o vencedor e 1 para o outro | |
 
-**Testes automatizados:** `npm test`, com 15 testes (trilha, aprovação, dificuldade progressiva, pontuação, streak, placar PvP, validação da saída do LLM, fallback para o cache, 503 e 422).
+**Testes automatizados:** `npm test`, com 23 testes (trilha, aprovação, dificuldade progressiva, pontuação, streak, placar PvP, chute do "Quem é", recompensas e pacotinhos, validação da saída do LLM, anti-alucinação das dicas, fallback para cache e pistas curadas, 404/422/503).
 
 ## 6. Roteiro sugerido para o vídeo (≈4 min)
 1. Menu, mostrando que mascote e fundo vieram do Gemini (CP4).
 2. Filtros → Campanha → trilha → jogar a fase 1, destacando o selo 🤖 e a explicação.
 3. Sobrevivência: timer, sequência, erro → resultado → ranking.
 4. PvP com duas janelas lado a lado: criar sala, entrar, jogar, placar ao vivo.
-5. Fallback: trocar a chave por uma inválida, mostrar o selo 📦 e o jogo seguindo normalmente.
-6. `npm test` rodando no terminal.
+5. "Quem é esse jogador?": errar 2 chutes (foto clareia, dicas abrem) e acertar; abrir o pacotinho e mostrar o álbum.
+6. Fallback: trocar a chave por uma inválida, mostrar o selo 📦 e o jogo seguindo normalmente.
+7. `npm test` rodando no terminal.

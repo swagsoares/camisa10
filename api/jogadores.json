@@ -1,0 +1,510 @@
+[
+ {
+  "id": "pele",
+  "nome": "Pelé",
+  "apelidos": [
+   "pele",
+   "edson arantes do nascimento",
+   "rei pele"
+  ],
+  "pais": "Brasil",
+  "bandeira": "🇧🇷",
+  "posicao": "Atacante",
+  "tracos": "cabelo curto preto, camisa amarela de seleção número 10, sorriso confiante, braço erguido comemorando",
+  "pistas": [
+   "Estreou na seleção principal com apenas 16 anos, em 1957.",
+   "No fim da carreira, jogou no New York Cosmos, dos Estados Unidos.",
+   "Defendeu o Santos por quase toda a carreira.",
+   "É o único jogador campeão de três Copas do Mundo.",
+   "É chamado de \"Rei do Futebol\"."
+  ],
+  "foto": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Pele_con_brasil_%28cropped%29.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Pele_con_brasil_(cropped).jpg"
+ },
+ {
+  "id": "ronaldinho",
+  "nome": "Ronaldinho",
+  "apelidos": [
+   "ronaldinho gaucho",
+   "ronaldo de assis moreira",
+   "r10"
+  ],
+  "pais": "Brasil",
+  "bandeira": "🇧🇷",
+  "posicao": "Meia-atacante",
+  "tracos": "cabelo longo cacheado preso com faixa na testa, sorriso enorme mostrando os dentes, camisa azul e grená número 10",
+  "pistas": [
+   "Começou a carreira profissional no Grêmio.",
+   "Jogou no Paris Saint-Germain, no Milan e no Flamengo.",
+   "Foi campeão da Copa do Mundo de 2002.",
+   "Ganhou a Bola de Ouro de 2005 jogando pelo Barcelona.",
+   "Famoso pelo sorriso e pelos dribles, tem o apelido de \"Bruxo\"."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/Ronaldinho_in_2019.jpg/500px-Ronaldinho_in_2019.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Ronaldinho_in_2019.jpg"
+ },
+ {
+  "id": "ronaldo",
+  "nome": "Ronaldo Fenômeno",
+  "apelidos": [
+   "ronaldo",
+   "ronaldo nazario",
+   "fenomeno",
+   "r9"
+  ],
+  "pais": "Brasil",
+  "bandeira": "🇧🇷",
+  "posicao": "Centroavante",
+  "tracos": "cabeça raspada com um pequeno topete triangular na frente, dentes da frente separados, camisa amarela número 9",
+  "pistas": [
+   "Saiu do Cruzeiro para o PSV, da Holanda, aos 17 anos.",
+   "Jogou no Barcelona, na Inter de Milão, no Real Madrid e no Milan.",
+   "Foi eleito melhor do mundo pela FIFA em 1996, 1997 e 2002.",
+   "Fez os dois gols da final da Copa de 2002.",
+   "Camisa 9 do penta, usou em 2002 um famoso corte com topete triangular."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/12.12.2025_%E2%80%93_Cerim%C3%B4nia_de_lan%C3%A7amento_do_SBT_News_-_54980664160_%28cropped2%29.jpg/500px-12.12.2025_%E2%80%93_Cerim%C3%B4nia_de_lan%C3%A7amento_do_SBT_News_-_54980664160_%28cropped2%29.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:12.12.2025_–_Cerimônia_de_lançamento_do_SBT_News_-_54980664160_(cropped2).jpg"
+ },
+ {
+  "id": "romario",
+  "nome": "Romário",
+  "apelidos": [
+   "romario",
+   "romario de souza faria",
+   "baixinho"
+  ],
+  "pais": "Brasil",
+  "bandeira": "🇧🇷",
+  "posicao": "Atacante",
+  "tracos": "baixinho, cabelo curto, expressão marrenta, camisa amarela número 11, apontando para o céu",
+  "pistas": [
+   "Foi revelado pelo Vasco da Gama.",
+   "Brilhou no PSV e no Barcelona nos anos 1990.",
+   "Foi eleito o melhor jogador da Copa de 1994.",
+   "Formou dupla de ataque com Bebeto no tetracampeonato.",
+   "Diz ter marcado mais de 1.000 gols e depois virou senador."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fe/Senadores_da_57%C2%AA_Legislatura_%2852689451805%29_%28cropped_-_3x4%29.jpg/500px-Senadores_da_57%C2%AA_Legislatura_%2852689451805%29_%28cropped_-_3x4%29.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Senadores_da_57ª_Legislatura_(52689451805)_(cropped_-_3x4).jpg"
+ },
+ {
+  "id": "zico",
+  "nome": "Zico",
+  "apelidos": [
+   "arthur antunes coimbra",
+   "galinho"
+  ],
+  "pais": "Brasil",
+  "bandeira": "🇧🇷",
+  "posicao": "Meia",
+  "tracos": "cabelo castanho volumoso dos anos 80, camisa rubro-negra listrada número 10",
+  "pistas": [
+   "Jogou na Udinese, da Itália, e no Kashima Antlers, do Japão.",
+   "Disputou as Copas de 1978, 1982 e 1986.",
+   "Foi campeão da Libertadores e do Mundial de Clubes em 1981.",
+   "É o maior ídolo da história do Flamengo.",
+   "Seu apelido é \"Galinho de Quintino\"."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Zico6.jpg/500px-Zico6.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Zico6.jpg"
+ },
+ {
+  "id": "garrincha",
+  "nome": "Garrincha",
+  "apelidos": [
+   "mane garrincha",
+   "manuel francisco dos santos",
+   "mane"
+  ],
+  "pais": "Brasil",
+  "bandeira": "🇧🇷",
+  "posicao": "Ponta-direita",
+  "tracos": "cabelo curto preto penteado para trás, pernas tortas, camisa preta e branca com estrela, driblando",
+  "pistas": [
+   "Nasceu em Pau Grande, no estado do Rio de Janeiro.",
+   "Jogou a maior parte da carreira no Botafogo.",
+   "Tinha as pernas tortas, o que não o impedia de driblar todo mundo.",
+   "Foi bicampeão mundial em 1958 e 1962.",
+   "Era conhecido como \"Anjo das Pernas Tortas\"."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3f/Manoel_Francisco_dos_Santos-Garrincha.jpg/500px-Manoel_Francisco_dos_Santos-Garrincha.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Manoel_Francisco_dos_Santos-Garrincha.jpg"
+ },
+ {
+  "id": "kaka",
+  "nome": "Kaká",
+  "apelidos": [
+   "kaka",
+   "ricardo izecson"
+  ],
+  "pais": "Brasil",
+  "bandeira": "🇧🇷",
+  "posicao": "Meia",
+  "tracos": "cabelo curto castanho bem arrumado, rosto de bom moço, camisa rubro-negra listrada número 22, apontando para o céu",
+  "pistas": [
+   "Começou a carreira no São Paulo.",
+   "Também jogou no Real Madrid e no Orlando City.",
+   "Ganhou a Liga dos Campeões de 2007.",
+   "Ganhou a Bola de Ouro de 2007.",
+   "Brilhou com a camisa 22 do Milan."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Kak%C3%A1_visited_Stadium_St._Petersburg.jpg/500px-Kak%C3%A1_visited_Stadium_St._Petersburg.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Kaká_visited_Stadium_St._Petersburg.jpg"
+ },
+ {
+  "id": "neymar",
+  "nome": "Neymar",
+  "apelidos": [
+   "neymar jr",
+   "neymar junior",
+   "ney"
+  ],
+  "pais": "Brasil",
+  "bandeira": "🇧🇷",
+  "posicao": "Atacante",
+  "tracos": "cabelo descolorido estiloso, brinco brilhante, camisa amarela número 10, fazendo pose de dança",
+  "pistas": [
+   "Também jogou no Al-Hilal, da Arábia Saudita.",
+   "Foi a contratação mais cara da história ao trocar o Barcelona pelo PSG, em 2017.",
+   "Foi campeão da Libertadores de 2011 com o Santos.",
+   "Bateu o pênalti do ouro olímpico do Brasil em 2016.",
+   "Superou Pelé como maior artilheiro da seleção brasileira."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Neymar_Junior_Brazil_V_Morocco_13_June_2026-40.jpg/500px-Neymar_Junior_Brazil_V_Morocco_13_June_2026-40.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Neymar_Junior_Brazil_V_Morocco_13_June_2026-40.jpg"
+ },
+ {
+  "id": "marta",
+  "nome": "Marta",
+  "apelidos": [
+   "marta vieira da silva",
+   "rainha marta"
+  ],
+  "pais": "Brasil",
+  "bandeira": "🇧🇷",
+  "posicao": "Atacante",
+  "tracos": "jogadora com cabelo preso em rabo de cavalo, camisa amarela número 10, comemorando",
+  "pistas": [
+   "Nasceu em Dois Riachos, Alagoas.",
+   "Jogou no Umeå, da Suécia, e no Orlando Pride, dos Estados Unidos.",
+   "É a maior artilheira da história das Copas do Mundo, entre homens e mulheres, com 17 gols.",
+   "Foi eleita melhor jogadora do mundo pela FIFA seis vezes.",
+   "É chamada de \"Rainha do Futebol\"."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/NC_Courage_vs_Orlando_Pride_%28Jun_2024%29_073_%28cropped%29.jpg/500px-NC_Courage_vs_Orlando_Pride_%28Jun_2024%29_073_%28cropped%29.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:NC_Courage_vs_Orlando_Pride_(Jun_2024)_073_(cropped).jpg"
+ },
+ {
+  "id": "messi",
+  "nome": "Lionel Messi",
+  "apelidos": [
+   "messi",
+   "leo messi",
+   "la pulga"
+  ],
+  "pais": "Argentina",
+  "bandeira": "🇦🇷",
+  "posicao": "Atacante",
+  "tracos": "baixinho, barba castanha, camisa listrada azul-celeste e branca número 10, segurando uma taça dourada",
+  "pistas": [
+   "Saiu de Rosário para o Barcelona ainda adolescente.",
+   "Também jogou no PSG e no Inter Miami.",
+   "Tem 8 Bolas de Ouro, o recorde.",
+   "Foi campeão da Copa de 2022 como capitão.",
+   "Seu apelido é \"La Pulga\"."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg/500px-Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg"
+ },
+ {
+  "id": "cristiano",
+  "nome": "Cristiano Ronaldo",
+  "apelidos": [
+   "cristiano",
+   "cr7"
+  ],
+  "pais": "Portugal",
+  "bandeira": "🇵🇹",
+  "posicao": "Atacante",
+  "tracos": "cabelo curto com gel, músculos definidos, camisa vermelha número 7, pulando na comemoração",
+  "pistas": [
+   "Começou a carreira no Sporting, de Lisboa.",
+   "Jogou na Juventus e no Al-Nassr, da Arábia Saudita.",
+   "É o maior artilheiro da história da Liga dos Campeões.",
+   "Foi campeão da Eurocopa de 2016 com Portugal.",
+   "É conhecido pelas iniciais \"CR7\"."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Cristiano_Ronaldo_Croatia_v_Portugal_2_July_2026-075_%28cropped%29.jpg/500px-Cristiano_Ronaldo_Croatia_v_Portugal_2_July_2026-075_%28cropped%29.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Cristiano_Ronaldo_Croatia_v_Portugal_2_July_2026-075_(cropped).jpg"
+ },
+ {
+  "id": "maradona",
+  "nome": "Diego Maradona",
+  "apelidos": [
+   "maradona",
+   "el pibe"
+  ],
+  "pais": "Argentina",
+  "bandeira": "🇦🇷",
+  "posicao": "Meia-atacante",
+  "tracos": "baixinho e forte, cabelo preto cacheado volumoso, camisa listrada azul-celeste e branca número 10",
+  "pistas": [
+   "Começou no Argentinos Juniors e é ídolo do Boca Juniors.",
+   "Levou o Napoli a dois títulos italianos.",
+   "Marcou contra a Inglaterra, em 1986, o chamado \"Gol do Século\".",
+   "Foi campeão do mundo com a Argentina em 1986, como capitão.",
+   "Fez o gol da \"Mão de Deus\"."
+  ],
+  "foto": "https://upload.wikimedia.org/wikipedia/commons/4/48/Argentina_celebrando_copa_%28cropped%29.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Argentina_celebrando_copa_(cropped).jpg"
+ },
+ {
+  "id": "zidane",
+  "nome": "Zinedine Zidane",
+  "apelidos": [
+   "zidane",
+   "zizou"
+  ],
+  "pais": "França",
+  "bandeira": "🇫🇷",
+  "posicao": "Meia",
+  "tracos": "careca, olhar sério, camisa azul número 10, elegante dominando a bola",
+  "pistas": [
+   "Nasceu em Marselha, filho de imigrantes argelinos.",
+   "Jogou na Juventus antes de ir para o Real Madrid.",
+   "Foi expulso na final da Copa de 2006 por uma cabeçada em Materazzi.",
+   "Fez dois gols de cabeça na final da Copa de 1998.",
+   "Como técnico, ganhou três Ligas dos Campeões seguidas pelo Real Madrid."
+  ],
+  "foto": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Zinedine_Zidane_by_Tasnim_03.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Zinedine_Zidane_by_Tasnim_03.jpg"
+ },
+ {
+  "id": "mbappe",
+  "nome": "Kylian Mbappé",
+  "apelidos": [
+   "mbappe"
+  ],
+  "pais": "França",
+  "bandeira": "🇫🇷",
+  "posicao": "Atacante",
+  "tracos": "cabeça raspada, sorriso largo, braços cruzados comemorando, camisa azul número 10, correndo muito rápido",
+  "pistas": [
+   "Foi revelado pelo Monaco.",
+   "Foi campeão do mundo em 2018, com apenas 19 anos.",
+   "Fez três gols na final da Copa de 2022.",
+   "É o maior artilheiro da história do PSG.",
+   "Foi para o Real Madrid em 2024."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/95/Kylian_Mbappe_France_v_Senegal_16_June_2026-391_%28cropped%29.jpg/500px-Kylian_Mbappe_France_v_Senegal_16_June_2026-391_%28cropped%29.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Kylian_Mbappe_France_v_Senegal_16_June_2026-391_(cropped).jpg"
+ },
+ {
+  "id": "cruyff",
+  "nome": "Johan Cruyff",
+  "apelidos": [
+   "cruyff",
+   "cruijff",
+   "johan cruijff"
+  ],
+  "pais": "Holanda",
+  "bandeira": "🇳🇱",
+  "posicao": "Atacante",
+  "tracos": "cabelo castanho comprido dos anos 70, magro, camisa laranja número 14",
+  "pistas": [
+   "Revelado pelo Ajax, ganhou três Copas dos Campeões seguidas pelo clube.",
+   "Foi jogador e depois técnico do Barcelona.",
+   "Ganhou a Bola de Ouro três vezes.",
+   "Liderou a Holanda do \"Futebol Total\", vice-campeã em 1974.",
+   "Um drible de giro famoso leva o seu sobrenome."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cb/Johan_Cruijff_%281974%29.jpg/500px-Johan_Cruijff_%281974%29.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Johan_Cruijff_(1974).jpg"
+ },
+ {
+  "id": "beckenbauer",
+  "nome": "Franz Beckenbauer",
+  "apelidos": [
+   "beckenbauer",
+   "kaiser"
+  ],
+  "pais": "Alemanha",
+  "bandeira": "🇩🇪",
+  "posicao": "Zagueiro (líbero)",
+  "tracos": "cabelo castanho dos anos 70, postura elegante de imperador, camisa branca número 5",
+  "pistas": [
+   "Jogou no Bayern de Munique e no New York Cosmos.",
+   "Ganhou a Bola de Ouro em 1972 e 1976.",
+   "Era um zagueiro líbero conhecido pela elegância.",
+   "Foi campeão do mundo como jogador (1974) e como técnico (1990).",
+   "Seu apelido era \"Kaiser\"."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Franz_Beckenbauer_%281975%29.jpg/500px-Franz_Beckenbauer_%281975%29.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Franz_Beckenbauer_(1975).jpg"
+ },
+ {
+  "id": "vinicius",
+  "nome": "Vinícius Júnior",
+  "apelidos": [
+   "vinicius",
+   "vini",
+   "vini jr",
+   "vinicius jr"
+  ],
+  "pais": "Brasil",
+  "bandeira": "🇧🇷",
+  "posicao": "Ponta-esquerda",
+  "tracos": "cabelo curto com desenho na lateral, sorriso, dançando na comemoração, camisa branca número 7",
+  "pistas": [
+   "Foi revelado pelo Flamengo.",
+   "Foi para o Real Madrid em 2018.",
+   "Fez o gol do título da Liga dos Campeões de 2022, contra o Liverpool.",
+   "Foi eleito o melhor jogador do mundo no prêmio The Best da FIFA de 2024.",
+   "Atacante brasileiro que comemora os gols dançando."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Vin%C3%ADcius_J%C3%BAnior_Brazil_V_Morocco_13_June_2026-207_%28cropped%29.jpg/500px-Vin%C3%ADcius_J%C3%BAnior_Brazil_V_Morocco_13_June_2026-207_%28cropped%29.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Vinícius_Júnior_Brazil_V_Morocco_13_June_2026-207_(cropped).jpg"
+ },
+ {
+  "id": "robertocarlos",
+  "nome": "Roberto Carlos",
+  "apelidos": [
+   "roberto carlos da silva"
+  ],
+  "pais": "Brasil",
+  "bandeira": "🇧🇷",
+  "posicao": "Lateral-esquerdo",
+  "tracos": "careca, coxas enormes, chutando a bola com força, camisa amarela número 6",
+  "pistas": [
+   "Jogou no Palmeiras antes de ir para a Inter de Milão.",
+   "Defendeu o Real Madrid por 11 temporadas.",
+   "Era um lateral-esquerdo com chute fortíssimo.",
+   "Foi campeão da Copa do Mundo de 2002.",
+   "Fez um famoso gol de falta \"impossível\", com efeito, contra a França em 1997."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/LS3_1288_%2853332367864%29_%28cropped%29.jpg/500px-LS3_1288_%2853332367864%29_%28cropped%29.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:LS3_1288_(53332367864)_(cropped).jpg"
+ },
+ {
+  "id": "cafu",
+  "nome": "Cafu",
+  "apelidos": [
+   "marcos evangelista de morais"
+  ],
+  "pais": "Brasil",
+  "bandeira": "🇧🇷",
+  "posicao": "Lateral-direito",
+  "tracos": "careca, sorriso largo, erguendo uma taça dourada acima da cabeça, camisa amarela número 2",
+  "pistas": [
+   "Começou a carreira no São Paulo.",
+   "Jogou na Roma e no Milan.",
+   "Era um lateral-direito incansável.",
+   "É o único jogador a disputar três finais de Copa seguidas: 1994, 1998 e 2002.",
+   "Foi o capitão que levantou a taça do penta em 2002."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/Cafu_-_26.02.2026_-_Cerim%C3%B4nia_de_apresenta%C3%A7%C3%A3o_das_ta%C3%A7as_da_Copa_do_Mundo_de_2026.jpg/500px-Cafu_-_26.02.2026_-_Cerim%C3%B4nia_de_apresenta%C3%A7%C3%A3o_das_ta%C3%A7as_da_Copa_do_Mundo_de_2026.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Cafu_-_26.02.2026_-_Cerimônia_de_apresentação_das_taças_da_Copa_do_Mundo_de_2026.jpg"
+ },
+ {
+  "id": "henry",
+  "nome": "Thierry Henry",
+  "apelidos": [
+   "henry"
+  ],
+  "pais": "França",
+  "bandeira": "🇫🇷",
+  "posicao": "Atacante",
+  "tracos": "cabeça raspada, alto e elegante, camisa vermelha com mangas brancas número 14",
+  "pistas": [
+   "Foi revelado pelo Monaco.",
+   "Também jogou no Barcelona e no New York Red Bulls.",
+   "Fez parte do time \"Invencível\" do Arsenal em 2003/04.",
+   "Foi campeão do mundo com a França em 1998.",
+   "É o maior artilheiro da história do Arsenal, onde ganhou uma estátua."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/Thierry_Henry_%2851649035951%29_%28cropped%29.jpg/500px-Thierry_Henry_%2851649035951%29_%28cropped%29.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Thierry_Henry_(51649035951)_(cropped).jpg"
+ },
+ {
+  "id": "iniesta",
+  "nome": "Andrés Iniesta",
+  "apelidos": [
+   "iniesta"
+  ],
+  "pais": "Espanha",
+  "bandeira": "🇪🇸",
+  "posicao": "Meia",
+  "tracos": "pálido, cabelo bem curto e ralo, camisa vermelha número 6, dando um passe preciso",
+  "pistas": [
+   "Encerrou a carreira no Japão e nos Emirados Árabes.",
+   "Passou 16 temporadas no time principal do Barcelona.",
+   "Ganhou 4 Ligas dos Campeões pelo Barcelona.",
+   "Formou um meio-campo histórico com Xavi.",
+   "Fez o gol do título da Espanha na final da Copa de 2010."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Andr%C3%A9s_Iniesta_Argentina_v_Spain_19_July_2026-034_%28cropped%29.jpg/500px-Andr%C3%A9s_Iniesta_Argentina_v_Spain_19_July_2026-034_%28cropped%29.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Andrés_Iniesta_Argentina_v_Spain_19_July_2026-034_(cropped).jpg"
+ },
+ {
+  "id": "haaland",
+  "nome": "Erling Haaland",
+  "apelidos": [
+   "haaland"
+  ],
+  "pais": "Noruega",
+  "bandeira": "🇳🇴",
+  "posicao": "Centroavante",
+  "tracos": "muito alto, cabelo loiro comprido preso em coque, sentado de pernas cruzadas meditando, camisa azul-celeste número 9",
+  "pistas": [
+   "Nasceu em Leeds, na Inglaterra, mas joga pela Noruega.",
+   "Jogou no Red Bull Salzburg e no Borussia Dortmund.",
+   "Fez 36 gols na primeira temporada de Premier League, um recorde.",
+   "Ganhou a tríplice coroa com o Manchester City em 2023.",
+   "Centroavante norueguês loiro que comemora gols meditando."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/Erling_Haaland_Morocco_v_Norway_7_June_2026-51.jpg/500px-Erling_Haaland_Morocco_v_Norway_7_June_2026-51.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Erling_Haaland_Morocco_v_Norway_7_June_2026-51.jpg"
+ },
+ {
+  "id": "modric",
+  "nome": "Luka Modrić",
+  "apelidos": [
+   "modric"
+  ],
+  "pais": "Croácia",
+  "bandeira": "🇭🇷",
+  "posicao": "Meia",
+  "tracos": "magro, cabelo loiro liso na altura do queixo, camisa xadrez vermelha e branca número 10",
+  "pistas": [
+   "Começou no Dinamo Zagreb e jogou no Tottenham.",
+   "Chegou ao Real Madrid em 2012.",
+   "Ganhou a Bola de Ouro de 2018, quebrando a sequência de Messi e Cristiano.",
+   "Foi eleito o melhor jogador da Copa de 2018.",
+   "É o capitão croata vice-campeão do mundo em 2018."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/Luka_Modric_Croatia_v_Portugal_2_July_2026-055.jpg/500px-Luka_Modric_Croatia_v_Portugal_2_July_2026-055.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Luka_Modric_Croatia_v_Portugal_2_July_2026-055.jpg"
+ },
+ {
+  "id": "buffon",
+  "nome": "Gianluigi Buffon",
+  "apelidos": [
+   "buffon",
+   "gigi buffon"
+  ],
+  "pais": "Itália",
+  "bandeira": "🇮🇹",
+  "posicao": "Goleiro",
+  "tracos": "goleiro alto de luvas, cabelo castanho jogado para trás, camisa de goleiro número 1, fazendo uma defesa",
+  "pistas": [
+   "Estreou profissionalmente pelo Parma.",
+   "Virou o goleiro mais caro da história ao ir para a Juventus, em 2001.",
+   "Disputou cinco Copas do Mundo.",
+   "Foi campeão do mundo com a Itália em 2006.",
+   "Goleiro italiano lendário, ídolo da Juventus."
+  ],
+  "foto": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Norway_Italy_-_June_2025_A_44_%28Gianluigi_Buffon%29.jpg/500px-Norway_Italy_-_June_2025_A_44_%28Gianluigi_Buffon%29.jpg",
+  "credito": "https://commons.wikimedia.org/wiki/File:Norway_Italy_-_June_2025_A_44_(Gianluigi_Buffon).jpg"
+ }
+]

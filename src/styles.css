@@ -1,7 +1,7 @@
 :root {
   --verde: #1f7a45; --azul: #2563de; --vermelho: #c9372c; --cinza: #8a8a8a; --amarelo: #ffc72c;
   --claro: #f8f6f0; --escuro: #141414; --texto: #fff;
-  font-family: 'Nunito', system-ui, sans-serif; color: var(--texto);
+  font-family: 'Nunito', 'Noto Color Emoji', system-ui, sans-serif; /* Noto: bandeiras no Windows */ color: var(--texto);
 }
 * { box-sizing: border-box; }
 body {
@@ -117,3 +117,44 @@ input { font: inherit; padding: .7rem 1rem; border-radius: 10px; border: 2px sol
   .menu-corpo { flex-direction: column-reverse; } .mascote { width: 160px; }
   .cartao-pergunta { padding: 1.2rem; }
 }
+
+/* Botões extras */
+.roxo { background: #6d28d9; } .menu-botoes .linha .btn { flex: 1; }
+
+/* Quem é esse jogador? */
+.quem-corpo { display: grid; grid-template-columns: 1.1fr 1fr; gap: 1.5rem; align-items: start; }
+.quem-imagens { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.quadro { margin: 0; background: var(--claro); border-radius: 16px; padding: .7rem; width: min(300px, 100%); color: #333;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .5); overflow: hidden; }
+.quadro img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: top; border-radius: 10px; display: block;
+  transition: filter .6s ease; background: #ddd; }
+.quadro figcaption { font-size: .8rem; text-align: center; margin-top: .4rem; } .quadro a { color: #333; }
+.tremendo { animation: tremer .1s 4; }
+.quem-dicas { width: auto; }
+.lista-dicas { margin: 0; padding-left: 1.3rem; display: flex; flex-direction: column; gap: .5rem; }
+.lista-dicas li { opacity: .45; } .lista-dicas li.aberta { opacity: 1; animation: surgir .4s; }
+
+/* Álbum */
+.album-barra { max-width: none; }
+.album { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+.figurinha { position: relative; background: var(--claro); color: #222; border-radius: 12px; padding: .5rem; border: 4px solid #fff;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .45); aspect-ratio: 3 / 4.2; display: flex; flex-direction: column; overflow: hidden; }
+.figurinha img { width: 100%; flex: 1; min-height: 0; object-fit: cover; object-position: top; border-radius: 8px; }
+.fig-info { display: flex; flex-direction: column; padding-top: .3rem; font-size: .85rem; } .fig-info small { opacity: .7; }
+.figurinha.vazia { background: rgba(255, 255, 255, .08); border: 3px dashed rgba(255, 255, 255, .35); color: #fff;
+  align-items: center; justify-content: center; box-shadow: none; }
+.figurinha.vazia span { font-size: 2rem; font-weight: 900; opacity: .6; }
+.figurinha.brilhante { border-color: var(--amarelo); background: linear-gradient(135deg, #fff6c8, #ffd54a 45%, #fff6c8 55%, #ffc72c);
+  background-size: 300% 300%; animation: brilho 3s linear infinite; }
+@keyframes brilho { to { background-position: 300% 300%; } }
+.repetidas { position: absolute; top: 6px; right: 6px; background: var(--vermelho); color: #fff; border-radius: 99px; padding: 0 .5rem; font-weight: 800; }
+
+/* Pacotinho */
+.overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, .75); display: grid; place-items: center; z-index: 10; padding: 16px; animation: surgir .3s; }
+.pacote { width: min(720px, 100%); align-items: center; text-align: center; }
+.pacote-cartas { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+.carta { width: 150px; display: flex; flex-direction: column; gap: .4rem; animation: virar .6s both; }
+@keyframes virar { from { transform: rotateY(90deg) scale(.6); opacity: 0; } }
+.etiqueta { font-weight: 800; font-size: .85rem; opacity: .7; } .etiqueta.nova { color: var(--amarelo); opacity: 1; }
+
+@media (max-width: 900px) { .quem-corpo { grid-template-columns: 1fr; } }

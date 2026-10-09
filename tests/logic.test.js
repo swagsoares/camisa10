@@ -42,3 +42,45 @@ test('placar PvP: mais pontos vence; empate decide pelo menor tempo', () => {
   ])
   assert.deepEqual(r.map((x) => x.nome), ['B', 'C', 'A'])
 })
+
+import { acertouJogador, blurFoto, pontosQuemE, recompensa, abrirPacote, colar } from '../src/logic.js'
+
+const RONALDINHO = { nome: 'Ronaldinho', apelidos: ['ronaldinho gaucho', 'r10'] }
+const MESSI = { nome: 'Lionel Messi', apelidos: ['messi', 'la pulga'] }
+
+test('quem é: aceita nome, apelido e sobrenome, ignorando acento e maiúscula', () => {
+  assert.ok(acertouJogador('Ronaldinho Gaúcho', RONALDINHO))
+  assert.ok(acertouJogador('r10', RONALDINHO))
+  assert.ok(acertouJogador('MESSI', MESSI))
+  assert.ok(acertouJogador('la pulga', MESSI))
+  assert.equal(acertouJogador('Ronaldo', RONALDINHO), false)
+  assert.equal(acertouJogador('me', MESSI), false)
+})
+
+test('quem é: foto clareia e pontos caem a cada erro', () => {
+  assert.ok(blurFoto(0) > blurFoto(1) && blurFoto(3) > blurFoto(4))
+  assert.equal(blurFoto(99), blurFoto(4))
+  assert.equal(pontosQuemE(0), 1000)
+  assert.equal(pontosQuemE(4), 200)
+  assert.equal(pontosQuemE(5), 0)
+})
+
+test('figurinhas: campanha dá mais nos níveis altos e nada se reprovar', () => {
+  assert.deepEqual(recompensa('campanha', { acertos: 2, dificuldade: 3 }), { n: 0, brilhantes: 0 })
+  assert.deepEqual(recompensa('campanha', { acertos: 3, dificuldade: 1 }), { n: 1, brilhantes: 0 })
+  assert.deepEqual(recompensa('campanha', { acertos: 5, dificuldade: 3 }), { n: 3, brilhantes: 1 })
+  assert.equal(recompensa('sobrevivencia', { acertos: 7 }).n, 2)
+  assert.equal(recompensa('sobrevivencia', { acertos: 40 }).n, 5)
+  assert.equal(recompensa('pvp', { venceu: true }).n, 3)
+  assert.equal(recompensa('pvp', { venceu: false }).n, 1)
+})
+
+test('figurinhas: pacote e colagem marcam novas, repetidas e brilhantes', () => {
+  const seq = [0, 0.99, 0]
+  const pacote = abrirPacote(['a', 'b'], { n: 3, brilhantes: 1 }, () => seq.shift())
+  assert.deepEqual(pacote.map((f) => f.id), ['a', 'b', 'a'])
+  assert.equal(pacote[0].brilhante, true)
+  const { colecao, resultado } = colar({}, pacote)
+  assert.deepEqual(resultado.map((f) => f.nova), [true, true, false])
+  assert.deepEqual(colecao.a, { qtd: 2, brilhante: true })
+})

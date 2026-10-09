@@ -20,7 +20,8 @@
         "--port",
         "8000",
         "--env-file",
-        ".env"
+        ".env",
+        "--reload"
       ],
       "port": 8000
     }
