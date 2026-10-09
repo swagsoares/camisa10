@@ -1,6 +1,6 @@
 # CP5 — Camisa 10: A Trilha do Craque (MVP)
 
-> ⚠️ **RASCUNHO.** Partes marcadas com ✍️ precisam ser escritas/conferidas pelo grupo. O professor exige que a seção 3.2 seja texto próprio, não gerado por IA.
+Grupo: Vitor Soares Gonçalves (RM 566181) · Pietro Boroto (RM 562407)
 
 ## 1. Entrega
 - Jogo online: https://camisa10-three.vercel.app
@@ -30,14 +30,14 @@
 
 **Ferramenta:** Claude Code (app desktop), modelo Claude Opus 5.5.
 
-> ✍️ Registrar aqui os prompts reais. Os dois primeiros abaixo são desta sessão; complete até ter pelo menos 5 conforme forem feitos (deploy, ajustes depois de jogar, correção de bugs).
+### 3.1 Prompts-chave
 
-### Prompt 1 — Planejamento e arquitetura
+#### Prompt 1 — Planejamento e arquitetura
 - **Pedido:** "tenho esse trabalho da faculdade que preciso tirar 10 [...] criar o melhor aplicativo [...] como se fosse um mvp com um banco de dados no supabase, um frontend no vercel [...] colocar tudo no github", anexando o PDF da CP5 e o relatório da CP4.
 - **O que a IA gerou:** leitura dos dois documentos e dos mockups; identificou o conflito (Ollama local não roda num site publicado na Vercel); propôs manter React + FastAPI + Pydantic e trocar só o provedor do LLM (Groq, mesma família Llama) e o SQLite pelo Supabase; mapeou cada item da rubrica (inclusive os critérios do 10).
 - **O que o grupo decidiu ou ajustou:** escolheu o PvP **online** com código de sala, em vez do local, e a **Groq** em vez da Gemini API, para manter o Llama e reduzir a mudança em relação à CP4.
 
-### Prompt 2 — Implementação do MVP
+#### Prompt 2 — Implementação do MVP
 - **Pedido:** respostas às perguntas de arquitetura (PvP online, Groq, contas existentes) → implementação.
 - **O que a IA gerou:** schema do Supabase com RLS e Realtime, base de 48 fatos, backend FastAPI, frontend com as 3 telas do mockup, trilha, PvP, testes.
 - **Ajustes e correções feitos no processo (reais):**
@@ -49,12 +49,12 @@
   6. **Fatos datados:** como a Copa de 2026 já aconteceu, fatos como "Brasil tem 5 títulos" foram reescritos como "até a Copa de 2022", para a IA não gerar perguntas desatualizadas.
   7. **React StrictMode removido:** ele roda os efeitos 2× em desenvolvimento e dobraria as chamadas ao LLM.
 
-### Prompt 3 — Configurar a chave da Groq
+#### Prompt 3 — Configurar a chave da Groq
 - **Pedido:** "pode colocar para mim por favor [chave da Groq]".
 - **O que a IA gerou:** criou o `.env` (ignorado pelo git) e testou a chave listando os modelos. Descobriu que a Groq **não oferece mais o Llama de chat**. Fez um teste comparativo entre `openai/gpt-oss-20b` e `qwen/qwen3.8-27b` com 4 fatos reais da base.
 - **O que o grupo decidiu ou ajustou:** adotou o Qwen 3.8 27B como padrão (resultado do teste na seção 4); o selo do jogo deixou de citar "Llama" e o Diário de Mudanças ganhou uma linha nova.
 
-### Prompt 4 — Conectar o Supabase e testar o jogo inteiro
+#### Prompt 4 — Conectar o Supabase e testar o jogo inteiro
 - **Pedido:** "eu rodei os 2 já no supabase" e, em seguida, o envio das chaves do projeto.
 - **O que a IA gerou:** preencheu o `.env`, conferiu as tabelas e o RLS pela API (a chave pública não enxerga `facts` nem `questions`), subiu backend e frontend e jogou no navegador: uma fase da campanha, a sobrevivência até o tempo esgotar com gravação no ranking, e o PvP com duas abas (Ana × Beto), com lobby, início sincronizado e placar ao vivo. Também simulou a IA fora do ar.
 - **Problemas encontrados e corrigidos:**
@@ -63,7 +63,7 @@
   3. **Mascote cobrindo a alternativa A** em telas estreitas: escondido abaixo de 900px.
   4. **Chaves novas do Supabase (`sb_secret_`)** não são JWT e não podem ir no header `Authorization`; o backend passou a mandar só `apikey` nesse caso.
 
-### Prompt 5 — GitHub + novos modos ("Quem é esse jogador?" e figurinhas)
+#### Prompt 5 — GitHub + novos modos ("Quem é esse jogador?" e figurinhas)
 - **Pedido:** "pode criar sim o repositório [...] ver repositórios do github para ajudar [...] usar alguma ia de vídeo como 'quem é esse jogador' aí vem uma foto do ronaldinho com traços de famosos e aí com chutes vai ficando mais fácil [...] também um modo figurinha".
 - **O que a IA gerou:** criou o repositório público (antes, verificou que nenhuma chave estava no histórico do git); pesquisou no GitHub (pouca coisa útil, só a ideia de usar a carreira em clubes como dica); implementou os dois modos.
 - **O que foi rejeitado ou ajustado (decisão do grupo com a IA):**
@@ -75,7 +75,8 @@
   3. **Tela branca em dev:** o proxy do Vite mandava `/api/jogadores.json` (importado pelo front) para o FastAPI. O proxy passou a ignorar `.json`.
   4. **Bandeiras viravam letras ("NO", "BR")** no Chrome do Windows, que não tem emoji de bandeira. Resolvido com a fonte Noto Color Emoji.
   5. **API da Wikipedia retornava 403** sem um User-Agent identificado (política de robôs da Wikimedia); usamos um com o link do repositório.
-### Prompt 6 — Revisão geral antes do deploy + pesquisa de apps parecidos
+
+#### Prompt 6 — Revisão geral antes do deploy + pesquisa de apps parecidos
 - **Pedido:** "antes de começarmos a colocar no ar vamos ver tudo que fizemos e tudo que podemos melhorar" e "podemos ver apps parecidos e ver o que conseguimos melhorar"; depois, "melhorar essa parte de filtros e configurações".
 - **O que a IA gerou:** uma auditoria item por item da rubrica, com teste no celular (375px), e uma pesquisa de referências (Who Are Ya?, FootyIQ, On Yer Head, Duolingo, Kahoot).
 - **Riscos encontrados e corrigidos:**
@@ -85,17 +86,11 @@
 - **O que o grupo decidiu ou rejeitou:** das 4 ideias tiradas dos apps parecidos (pistas por comparação, desafio diário, ajuda 50/50, compartilhar resultado), implementamos **só as pistas por comparação**, que melhoram um modo existente sem criar tela nova. As outras ficaram como trabalhos futuros, para não inflar o escopo, o vídeo de 5 minutos e o código que precisamos saber explicar.
 - **Também entrou:** CI no GitHub Actions (os testes rodam a cada push) e ranking do "Quem é esse jogador?".
 
-### Prompt 7 — Deploy na Vercel
+#### Prompt 7 — Deploy na Vercel
 - **Pedido:** "só falta o deploy no vercel, consegue me ajudar".
 - **O que a IA gerou:** o passo a passo do deploy; o grupo fez o login e cadastrou as variáveis no painel. Depois, a IA testou o site publicado: `/api/saude` (banco ok), perguntas e dicas geradas pela IA, ranking, caricaturas e criação de sala PvP com lobby em tempo real.
 - **Ajustes durante o deploy:** a Vercel sugeriu adicionar a integração do Supabase, o que **recusamos**, porque ela criaria um banco novo com outras variáveis. A Vercel também alertou que variáveis `VITE_` ficam expostas no navegador, o que é **intencional** para a URL e a chave *anon* (pública, protegida pelo RLS); a chave *service* ficou sem o prefixo. Na primeira tentativa de salvar, as variáveis duplicaram e precisamos limpar o formulário.
 - **Alucinação encontrada só em produção:** a dica do Zico dizia "Conquistou títulos na Udinese e no Kashima", mas a pista era apenas "Jogou na Udinese...". A validação por números não pegava esse caso. Criamos uma regra por **grupos de sinônimos**: palavras de conquista (título, campeão, venceu, recorde, artilheiro) só podem aparecer se a pista já fala daquele tipo de feito ("ganhou" libera "conquistou"; "maior artilheiro" libera "recorde"). Revalidamos o cache: 4 de 48 versões foram reprovadas (entre elas "recordes de gol" para o Romário e "ex-campeão do Palmeiras" para o Roberto Carlos, nenhuma presente nas pistas) e foram regeneradas. Teste de regressão: `test_dica_que_inventa_conquista_e_barrada`.
-
-## 3.3 Trabalhos futuros
-- Desafio diário ("jogador do dia", igual para todos) com sequência de dias, estilo Wordle e FootyIQ.
-- Ajuda 50/50 no quiz (power-up estilo Kahoot e Duolingo) e compartilhar o resultado com emojis.
-- Validar as respostas no servidor (hoje ficam no navegador, então dá para trapacear pelo DevTools no PvP e no "Quem é") e conferir pontuações antes de gravar no ranking.
-- Login (Supabase Auth) para sincronizar álbum e progresso entre aparelhos. — ✍️ (ex.: ajuste de dificuldade/visual depois de jogar)
 
 ### 3.2 Como o código funciona (texto do grupo)
 
@@ -104,6 +99,12 @@
 **Quando a IA dá problema.** Se a Groq estourar a cota, tentamos outro modelo, o gpt-oss. Se falhar, usamos perguntas guardadas em cache. No "Quem é", barramos dicas inventadas. Aconteceu com o Zico: a IA disse que ele foi campeão na Udinese, mas ele só jogou lá.
 
 **O PvP.** Quem cria a sala recebe um código de quatro letras, e as cinco perguntas ficam salvas no Supabase. O Realtime sincroniza os jogadores e o placar. Ganha quem fizer mais pontos, e responder mais rápido vale mais.
+
+### 3.3 Trabalhos futuros
+- Desafio diário ("jogador do dia", igual para todos) com sequência de dias, estilo Wordle e FootyIQ.
+- Ajuda 50/50 no quiz (power-up estilo Kahoot e Duolingo) e compartilhar o resultado com emojis.
+- Validar as respostas no servidor (hoje ficam no navegador, então dá para trapacear pelo DevTools no PvP e no "Quem é") e conferir pontuações antes de gravar no ranking.
+- Login (Supabase Auth) para sincronizar álbum e progresso entre aparelhos.
 
 ## 4. Diário de Mudanças em relação à CP4
 
@@ -152,11 +153,6 @@
 
 **Testes automatizados:** `npm test`, com 25 testes, também rodando no GitHub Actions a cada push (trilha, aprovação, dificuldade progressiva, pontuação, streak, placar PvP, chute do "Quem é", recompensas e pacotinhos, validação da saída do LLM, anti-alucinação das dicas, fallback para cache e pistas curadas, 404/422/503).
 
-## 6. Roteiro sugerido para o vídeo (≈4 min)
-1. Menu, mostrando que mascote e fundo vieram do Gemini (CP4).
-2. Filtros → Campanha → trilha → jogar a fase 1, destacando o selo 🤖 e a explicação.
-3. Sobrevivência: timer, sequência, erro → resultado → ranking.
-4. PvP com duas janelas lado a lado: criar sala, entrar, jogar, placar ao vivo.
-5. "Quem é esse jogador?": errar 2 chutes (foto clareia, dicas abrem) e acertar; abrir o pacotinho e mostrar o álbum.
-6. Fallback: trocar a chave por uma inválida, mostrar o selo 📦 e o jogo seguindo normalmente.
-7. `npm test` rodando no terminal.
+## 6. Vídeo de demonstração
+
+https://youtu.be/8FruwyaFvoY (4min55s). Mostra o jogo publicado na Vercel, o GitHub e o Supabase, a campanha com perguntas geradas pela IA, filtros e configurações, sobrevivência, o fallback com a IA fora do ar, "Quem é esse jogador?", o álbum de figurinhas, o PvP com duas janelas e os testes automatizados no GitHub Actions.
