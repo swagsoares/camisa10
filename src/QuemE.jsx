@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import JOGADORES from '../api/jogadores.json'
-import { api, som } from './lib'
+import { api, som, supabase } from './lib'
 import { CHUTES_MAX, acertouJogador, blurFoto, pontosQuemE } from './logic'
 
 const RODADAS = 5
@@ -8,7 +8,7 @@ const sortear = () => [...JOGADORES].sort(() => Math.random() - 0.5).slice(0, RO
 
 // Modo "Quem é esse jogador?": dicas da IA (texto) + caricatura do Gemini (imagem) + foto real que clareia.
 // ponytail: nomes e fotos estão no bundle (dá para "colar" pelo devtools); servidor só se virar competitivo.
-export default function QuemE({ aoGanhar, aoSair }) {
+export default function QuemE({ aoGanhar, aoSair, nome, setNome, verRanking }) {
   const [fila] = useState(sortear)
   const [idx, setIdx] = useState(0)
   const [dicas, setDicas] = useState(null)
@@ -18,6 +18,7 @@ export default function QuemE({ aoGanhar, aoSair }) {
   const [placar, setPlacar] = useState({ pontos: 0, acertos: 0 })
   const [tremer, setTremer] = useState(false)
   const [temCaricatura, setTemCaricatura] = useState(true)
+  const [salvou, setSalvou] = useState(false)
   const j = fila[idx]
 
   useEffect(() => {
@@ -60,6 +61,17 @@ export default function QuemE({ aoGanhar, aoSair }) {
             <div><b>{placar.acertos}/{RODADAS}</b><small>jogadores</small></div>
             <div><b>{placar.pontos}</b><small>pontos</small></div>
           </div>
+          {salvou === true ? <p className="dica">Salvo no ranking ✅</p> : (
+            <div className="linha">
+              <input value={nome} maxLength={20} onChange={(e) => setNome(e.target.value)} placeholder="Seu nome" />
+              <button className="btn amarelo" disabled={!nome.trim()} onClick={async () => {
+                const { error } = await supabase.from('scores').insert({ nome: nome.trim(), modo: 'quem', pontos: placar.pontos })
+                setSalvou(error ? 'erro' : true)
+              }}>Salvar no ranking</button>
+            </div>
+          )}
+          {salvou === 'erro' && <p className="dica">Não foi possível salvar agora.</p>}
+          <button className="btn azul" onClick={verRanking}>Ver ranking</button>
           <button className="btn cinza" onClick={aoSair}>Menu</button>
         </div>
       </div>

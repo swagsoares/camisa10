@@ -107,6 +107,10 @@ def test_dicas_caem_para_as_curadas_quando_ia_falha(monkeypatch):
         raise httpx.ConnectError("sem rede")
     monkeypatch.setattr(m, "chamar_llm_dicas", llm)
     jogador = next(iter(m.JOGADORES.values()))
+    pre = ["a", "b", "c", "d", "e"]
+    monkeypatch.setattr(m, "DICAS_CACHE", {jogador["id"]: [pre]})  # 1º fallback: dicas pré-geradas
+    assert TestClient(m.app).post("/api/dicas", json={"jogador": jogador["id"]}).json() == {"dicas": pre, "fonte": "cache"}
+    monkeypatch.setattr(m, "DICAS_CACHE", {})  # 2º fallback: pistas curadas
     r = TestClient(m.app).post("/api/dicas", json={"jogador": jogador["id"]})
     assert r.status_code == 200 and r.json() == {"dicas": jogador["pistas"], "fonte": "curadas"}
     assert TestClient(m.app).post("/api/dicas", json={"jogador": "nao-existe"}).status_code == 404

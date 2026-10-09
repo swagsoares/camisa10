@@ -68,7 +68,7 @@ export default function App() {
       {tela === 'ranking' && <Ranking voltar={() => ir('menu')} />}
       {tela === 'pvp' && <Pvp filtros={filtros} nome={nome} setNome={setNome} aoSair={() => ir('menu')}
         aoTerminar={(venceu) => ganharPacote(recompensa('pvp', { venceu }))} />}
-      {tela === 'quem' && <QuemE aoGanhar={ganhar} aoSair={() => ir('menu')} />}
+      {tela === 'quem' && <QuemE aoGanhar={ganhar} aoSair={() => ir('menu')} nome={nome} setNome={setNome} verRanking={() => ir('ranking')} />}
       {tela === 'album' && <Album colecao={colecao} voltar={() => ir('menu')} />}
       {pacote && <Pacote figurinhas={pacote} fechar={() => setPacote(null)} />}
     </div>
@@ -227,16 +227,25 @@ function Resultado({ r, nome, setNome, ir, proxima, repetir }) {
   )
 }
 
+const MODOS_RANKING = [['sobrevivencia', 'Sobrevivência'], ['quem', 'Quem é esse jogador?']]
+
 function Ranking({ voltar }) {
+  const [modo, setModo] = useState('sobrevivencia')
   const [linhas, setLinhas] = useState(null)
   useEffect(() => {
-    supabase.from('scores').select('nome,pontos,created_at').eq('modo', 'sobrevivencia').order('pontos', { ascending: false }).limit(10)
+    setLinhas(null)
+    supabase.from('scores').select('nome,pontos,created_at').eq('modo', modo).order('pontos', { ascending: false }).limit(10)
       .then(({ data, error }) => setLinhas(error ? [] : data))
-  }, [])
+  }, [modo])
   return (
     <div className="tela centro">
       <div className="painel">
-        <h1>🏆 Ranking — Sobrevivência</h1>
+        <h1>🏆 Ranking</h1>
+        <div className="chips">
+          {MODOS_RANKING.map(([id, rot]) => (
+            <button key={id} className={`chip ${modo === id ? 'ativo amarelo' : ''}`} onClick={() => setModo(id)}>{rot}</button>
+          ))}
+        </div>
         {!linhas ? <p>Carregando…</p> : linhas.length === 0 ? <p className="dica">Ninguém no ranking ainda. Seja o primeiro!</p> : (
           <ol className="placar">
             {linhas.map((l, i) => <li key={i} className={i === 0 ? 'lider' : ''}><span>{i + 1}º {l.nome}</span><span>{l.pontos} pts</span></li>)}

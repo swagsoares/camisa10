@@ -23,7 +23,7 @@ create index if not exists questions_fact_idx on questions(fact_id);
 create table if not exists scores (
   id bigint generated always as identity primary key,
   nome text not null check (char_length(nome) between 1 and 20),
-  modo text not null check (modo in ('sobrevivencia','campanha')),
+  modo text not null check (modo in ('sobrevivencia','campanha','quem')),
   pontos int not null check (pontos between 0 and 1000000),
   created_at timestamptz not null default now()
 );

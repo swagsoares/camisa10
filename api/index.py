@@ -161,6 +161,8 @@ async def montar_lote(categoria: str | None, dificuldade: int, n: int, excluir: 
 
 # ---------- Modo "Quem é esse jogador?" ----------
 JOGADORES = {j["id"]: j for j in json.loads((Path(__file__).parent / "jogadores.json").read_text(encoding="utf8"))}
+_cache = Path(__file__).parent / "dicas_cache.json"
+DICAS_CACHE = json.loads(_cache.read_text(encoding="utf8")) if _cache.exists() else {}
 
 PROMPT_DICAS = """Você é um narrador de futebol brasileiro animado apresentando o desafio "Quem é esse jogador?".
 Reescreva cada PISTA como uma dica curta e misteriosa, na mesma ordem (da mais difícil para a mais fácil).
@@ -209,7 +211,9 @@ async def gerar_dicas(jogador: dict) -> dict:
                 return {"dicas": [d.strip() for d in dicas], "fonte": "ia"}
         except (httpx.HTTPError, ValueError, KeyError, TypeError, json.JSONDecodeError):
             pass
-    return {"dicas": jogador["pistas"], "fonte": "curadas"}  # fallback: pistas escritas pelo grupo
+    if DICAS_CACHE.get(jogador["id"]):  # fallback 1: dicas geradas pela IA antes (scripts/aquece_cache.py)
+        return {"dicas": random.choice(DICAS_CACHE[jogador["id"]]), "fonte": "cache"}
+    return {"dicas": jogador["pistas"], "fonte": "curadas"}  # fallback 2: pistas escritas pelo grupo
 
 
 app = FastAPI(title="Camisa 10 API")
@@ -261,4 +265,11 @@ async def dicas(req: PedidoDicas):
 
 @app.get("/api/saude")
 async def saude():
-    return {"ok": True, "modelos": LLM_MODELS, "llm": LLM_BASE_URL.split("/")[2]}
+    """Também é o keep-alive: a Vercel chama 1x/dia (vercel.json > crons) e a consulta ao banco
+    impede o Supabase gratuito de pausar o projeto por inatividade (7 dias)."""
+    try:
+        await sb("GET", "facts?select=id&limit=1")
+        banco = "ok"
+    except httpx.HTTPError:
+        banco = "fora"
+    return {"ok": banco == "ok", "banco": banco, "modelos": LLM_MODELS, "llm": LLM_BASE_URL.split("/")[2]}
