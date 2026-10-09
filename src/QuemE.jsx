@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import JOGADORES from '../api/jogadores.json'
-import { api, som, supabase } from './lib'
+import { api, nomeModelo, som, supabase } from './lib'
 import { CHUTES_MAX, acertouJogador, blurFoto, comparar, filtroCaricatura, pontosQuemE, setor } from './logic'
 
 const RODADAS = 5
@@ -111,7 +111,7 @@ export default function QuemE({ aoGanhar, aoSair, nome, setNome, verRanking }) {
         </div>
 
         <div className="painel quem-dicas">
-          <h3>Dicas {dicas && <span className={`selo ${dicas.fonte === 'ia' ? 'ia' : 'cache'}`}>{dicas.fonte === 'ia' ? '🤖 narradas pela IA' : '📋 dicas do grupo'}</span>}</h3>
+          <h3>Dicas {dicas && <span className={`selo ${dicas.fonte === 'ia' ? 'ia' : 'cache'}`}>{{ ia: `🤖 narradas pela IA${nomeModelo(dicas.modelo)}`, cache: '📦 pré-geradas pela IA (cache)', curadas: '📋 dicas do grupo' }[dicas.fonte]}</span>}</h3>
           {!dicas ? <p className="dica">A IA está preparando as dicas…</p> : (
             <ol className="lista-dicas">
               {dicas.dicas.map((d, i) => <li key={i} className={i < reveladas ? 'aberta' : ''}>{i < reveladas ? d : '🔒 Erre um chute para liberar'}</li>)}

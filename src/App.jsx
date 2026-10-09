@@ -100,6 +100,7 @@ function Menu({ ir, jogarSobrevivencia, coladas }) {
         </nav>
         <img className="mascote" src="/assets/mascote.png" alt="Mascote do Camisa 10" />
       </div>
+      <p className="creditos-ia">🤖 IA generativa: perguntas e dicas por <b>Qwen 3.8</b> / <b>gpt-oss</b> (Groq) · mascote, estádio e caricaturas por <b>Google Gemini</b></p>
     </div>
   )
 }

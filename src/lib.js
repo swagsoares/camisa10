@@ -13,6 +13,9 @@ export async function api(caminho, corpo) {
   return r.json()
 }
 
+// "qwen/qwen3.8-27b" -> "Qwen3.8-27b": selo mostra qual modelo gerou o conteúdo (regra da CP4).
+export const nomeModelo = (m) => (m ? ' · ' + m.split('/').pop().replace(/^./, (c) => c.toUpperCase()) : '')
+
 // localStorage pode falhar (aba anônima, bloqueio); o jogo funciona sem ele.
 export const salvo = {
   ler: (k, padrao) => { try { return JSON.parse(localStorage.getItem(k)) ?? padrao } catch { return padrao } },

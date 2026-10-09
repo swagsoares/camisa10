@@ -43,7 +43,7 @@ async def dicas():
             if len(versoes) >= VERSOES:
                 break
             try:
-                d = await m.chamar_llm_dicas(j)
+                d = (await m.chamar_llm_dicas(j))["dicas"]
                 if m.dicas_validas(d, j):
                     versoes.append([x.strip() for x in d])
             except Exception as e:  # noqa: BLE001

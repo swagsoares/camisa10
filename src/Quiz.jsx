@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { pontos, sequenciaApos, TEMPO_LIMITE_MS } from './logic'
-import { som } from './lib'
+import { nomeModelo, som } from './lib'
 
 // Tela de gameplay (mockup CP4, tela 2). O modo de jogo decide de onde vêm as perguntas.
 // carregar(i, acertos) -> Promise<pergunta | null>; null = acabaram as perguntas.
@@ -104,7 +104,7 @@ export default function Quiz({ titulo, total, carregar, comTimer, morteSubita, a
       ) : (
         <div key={idx} className="entrar">
           <div className="cartao-pergunta">
-            <span className={`selo ${pergunta.fonte}`}>{pergunta.fonte === 'ia' ? '🤖 Gerada agora pela IA' : '📦 Do cache (IA indisponível)'}</span>
+            <span className={`selo ${pergunta.fonte}`}>{pergunta.fonte === 'ia' ? `🤖 Gerada agora pela IA${nomeModelo(pergunta.modelo)}` : `📦 Pré-gerada pela IA${nomeModelo(pergunta.modelo)} (cache)`}</span>
             <h2>{pergunta.pergunta}</h2>
           </div>
           <div className={`alternativas n${pergunta.alternativas.length}`}>

@@ -91,7 +91,9 @@ async def llm_json(sistema: str, usuario: str, max_tokens: int, temperatura: flo
                 r = await c.post(f"{LLM_BASE_URL}/chat/completions", json=corpo,
                                  headers={"Authorization": f"Bearer {LLM_API_KEY or 'ollama'}"})  # header vazio é inválido
                 r.raise_for_status()
-                return json.loads(r.json()["choices"][0]["message"]["content"])
+                dados = json.loads(r.json()["choices"][0]["message"]["content"])
+                dados["_modelo"] = modelo  # o jogo mostra qual modelo gerou cada conteúdo (regra da CP4)
+                return dados
             except (httpx.HTTPError, KeyError, json.JSONDecodeError) as e:
                 erro = e
     raise erro
@@ -117,8 +119,8 @@ async def gerar(fact: dict) -> dict | None:
     formato = "verdadeiro_falso" if random.random() < (0.5 if fact["dificuldade"] == 1 else 0.2) else "multipla_escolha"
     for _ in range(2):
         try:
-            p = normalizar(await chamar_llm(fact["fato"], formato, fact["dificuldade"]), formato)
-            payload = p.model_dump()
+            bruto = await chamar_llm(fact["fato"], formato, fact["dificuldade"])
+            payload = {**normalizar(bruto, formato).model_dump(), "modelo": bruto.get("_modelo")}
             try:
                 await sb("POST", "questions", json={"fact_id": fact["id"], "formato": formato, "payload": payload})
             except httpx.HTTPError:
@@ -199,10 +201,11 @@ def revela_nome(texto: str, jogador: dict) -> bool:
     return any(f" {sem_acento(n)} " in alvo for n in nomes if len(n) > 2)
 
 
-async def chamar_llm_dicas(jogador: dict) -> list[str]:
+async def chamar_llm_dicas(jogador: dict) -> dict:
+    """Devolve {"dicas": [...], "_modelo": "..."}."""
     pistas = "\n".join(f"{i + 1}. {p}" for i, p in enumerate(jogador["pistas"]))
     usuario = f"JOGADOR (segredo, não revele): {jogador['nome']}\nPISTAS:\n{pistas}"
-    return (await llm_json(PROMPT_DICAS, usuario, 700, 0.5))["dicas"]
+    return await llm_json(PROMPT_DICAS, usuario, 700, 0.5)
 
 
 def dicas_validas(dicas, jogador: dict) -> bool:
@@ -218,9 +221,9 @@ def dicas_validas(dicas, jogador: dict) -> bool:
 async def gerar_dicas(jogador: dict) -> dict:
     for _ in range(2):
         try:
-            dicas = await chamar_llm_dicas(jogador)
-            if dicas_validas(dicas, jogador):
-                return {"dicas": [d.strip() for d in dicas], "fonte": "ia"}
+            r = await chamar_llm_dicas(jogador)
+            if dicas_validas(r["dicas"], jogador):
+                return {"dicas": [d.strip() for d in r["dicas"]], "fonte": "ia", "modelo": r.get("_modelo")}
         except (httpx.HTTPError, ValueError, KeyError, TypeError, json.JSONDecodeError):
             pass
     if DICAS_CACHE.get(jogador["id"]):  # fallback 1: dicas geradas pela IA antes (scripts/aquece_cache.py)
