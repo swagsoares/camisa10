@@ -1,6 +1,6 @@
 # ⚽ Camisa 10: A Trilha do Craque — MVP (CP5)
 
-Quiz de futebol com progressão estilo Duolingo, **PvP online** estilo Kahoot e **modo sobrevivência**, com perguntas geradas em tempo real por IA (Llama) a partir de uma base de fatos curada (RAG).
+Quiz de futebol com progressão estilo Duolingo, **PvP online** estilo Kahoot e **modo sobrevivência**, com perguntas geradas em tempo real por IA (LLM de pesos abertos: Qwen 3.8 via Groq, ou Llama/Qwen local via Ollama) a partir de uma base de fatos curada (RAG).
 
 🎮 **Jogar online:** `https://SEU-PROJETO.vercel.app` · 🎬 **Vídeo:** `LINK_DO_VIDEO` · 📄 **Relatório CP5:** [docs/RELATORIO_CP5.md](docs/RELATORIO_CP5.md)
 
@@ -9,7 +9,7 @@ Grupo: Vitor Soares Gonçalves (RM 566181) · Pietro Boroto (RM 562407)
 ## Arquitetura
 
 ```
-React (Vite) ──/api──► FastAPI (Vercel Python) ──► Llama 3.1 8B (Groq)  ou  Llama 3.2 (Ollama local)
+React (Vite) ──/api──► FastAPI (Vercel Python) ──► Qwen 3.8 27B (Groq)  ou  Llama 3.2 / Qwen 2.5 (Ollama local)
      │                        │
      │                        └──► Supabase Postgres: facts (RAG) · questions (cache/fallback) · rooms
      └── supabase-js ──► scores (ranking) · room_results + Realtime (lobby e placar PvP)
@@ -22,7 +22,7 @@ React (Vite) ──/api──► FastAPI (Vercel Python) ──► Llama 3.1 8B 
 
 | IA generativa | Onde aparece no jogo |
 |---|---|
-| **Texto** — Llama 3.1 8B (Groq) / Llama 3.2 (Ollama) | Toda pergunta, alternativa e explicação (selo 🤖 "Gerada agora pela IA") |
+| **Texto** — Qwen 3.8 27B (Groq) / Llama 3.2 ou Qwen 2.5 (Ollama) | Toda pergunta, alternativa e explicação (selo 🤖 "Gerada agora pela IA") |
 | **Imagem** — Google Gemini (assets da CP4) | Mascote (menu, gameplay, resultado) e fundo de estádio de todas as telas |
 
 ## Mecânicas

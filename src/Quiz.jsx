@@ -104,7 +104,7 @@ export default function Quiz({ titulo, total, carregar, comTimer, morteSubita, a
       ) : (
         <div key={idx} className="entrar">
           <div className="cartao-pergunta">
-            <span className={`selo ${pergunta.fonte}`}>{pergunta.fonte === 'ia' ? '🤖 Gerada agora pela IA (Llama)' : '📦 Do cache (IA indisponível)'}</span>
+            <span className={`selo ${pergunta.fonte}`}>{pergunta.fonte === 'ia' ? '🤖 Gerada agora pela IA' : '📦 Do cache (IA indisponível)'}</span>
             <h2>{pergunta.pergunta}</h2>
           </div>
           <div className={`alternativas n${pergunta.alternativas.length}`}>

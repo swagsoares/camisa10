@@ -19,7 +19,7 @@
 | Mecânica: filtros (categoria, dificuldade) | Sim | ✅ |
 | Mecânica: PvP (mesmo lote, acertos + tempo) | Online, por código de sala | ✅ |
 | Mecânica: sobrevivência (dificuldade sobe, fim no erro/tempo) | Sim | ✅ |
-| IA texto: Llama + RAG + JSON mode + nova tentativa | Sim (provedor mudou, ver seção 4) | ✅ |
+| IA texto: LLM local/aberto + RAG + JSON mode + nova tentativa | Sim (provedor e modelo mudaram, ver seção 4) | ✅ |
 | IA imagem: mascote e fundo Gemini, fundo removido por thresholding | Sim, integrados ao jogo | ✅ |
 | Prefetch da próxima pergunta / lote na campanha | Sim | ✅ |
 | Extras: ranking global, pontuação por rapidez, sons, animações, fallback de IA | Novos (acréscimos, não mudanças) | ➕ |
@@ -47,11 +47,16 @@
   6. **Fatos datados:** como a Copa de 2026 já aconteceu, fatos como "Brasil tem 5 títulos" foram reescritos como "até a Copa de 2022", para a IA não gerar perguntas desatualizadas.
   7. **React StrictMode removido:** ele roda os efeitos 2× em desenvolvimento e dobraria as chamadas ao LLM.
 
-### Prompt 3 — ✍️ (ex.: configuração do Supabase/Vercel e primeiro deploy)
+### Prompt 3 — Configurar a chave da Groq
+- **Pedido:** "pode colocar para mim por favor [chave da Groq]".
+- **O que a IA gerou:** criou o `.env` (ignorado pelo git) e testou a chave listando os modelos. Descobriu que a Groq **não oferece mais o Llama de chat**. Fez um teste comparativo entre `openai/gpt-oss-20b` e `qwen/qwen3.8-27b` com 4 fatos reais da base.
+- **O que o grupo decidiu ou ajustou:** adotou o Qwen 3.8 27B como padrão (resultado do teste na seção 4); o selo do jogo deixou de citar "Llama" e o Diário de Mudanças ganhou uma linha nova.
+
+### Prompt 4 — ✍️ (ex.: configuração do Supabase e primeiro deploy)
 - Pedido / O que a IA gerou / O que ajustamos:
 
-### Prompt 4 — ✍️ (ex.: bug encontrado jogando o PvP com dois navegadores)
-### Prompt 5 — ✍️ (ex.: ajuste de dificuldade/visual depois de jogar)
+### Prompt 5 — ✍️ (ex.: bug encontrado jogando o PvP com dois navegadores)
+### Prompt 6 — ✍️ (ex.: ajuste de dificuldade/visual depois de jogar)
 
 ### 3.2 Como o código funciona — ✍️ TEXTO DO GRUPO (não gerado por IA)
 > Escrevam com as próprias palavras. Roteiro sugerido: (1) o que acontece quando o jogador clica em "Iniciar partida" até a pergunta aparecer (`Partida` → `api('perguntas')` → `montar_lote` → `gerar` → `chamar_llm` → `normalizar`); (2) como o fallback decide usar o cache; (3) como o `Quiz.jsx` faz o prefetch e o timer; (4) como o PvP usa Presence, Broadcast e Postgres Changes; (5) por que a validação Pydantic existe.
@@ -60,8 +65,8 @@
 
 | Item alterado | CP4 | CP5 | Justificativa técnica |
 |---|---|---|---|
-| Provedor do LLM em produção | Llama 3.2 3B local via Ollama | Llama 3.1 8B via **Groq** (API compatível com OpenAI); Ollama continua suportado trocando `LLM_BASE_URL` | O MVP precisa ser jogável publicamente (critério do 10) e uma função na Vercel não alcança um Ollama rodando no notebook do grupo. Antes de mudar, testamos localmente: em CPU sem GPU a 1ª geração levou 106,7 s e as seguintes 7–11 s, inviável para o timer de 20 s da sobrevivência. A Groq hospeda modelos Llama (mesma família e licença) com latência abaixo de 1 s e camada gratuita. **Impacto:** o código é o mesmo para os dois provedores (só muda a URL/variável), então o modo local da CP4 continua funcionando. |
-| Versão/tamanho do modelo | Llama 3.2 **3B** | Llama 3.1 **8B** (`llama-3.1-8b-instant`) | ✍️ Conferir no console da Groq se o 3B está disponível. O 8B é o menor Llama oferecido de forma estável na Groq; segue melhor o JSON e o português. Configurável por `LLM_MODEL`. |
+| Provedor do LLM em produção | Llama 3.2 3B local via Ollama | **Groq** (API compatível com OpenAI); Ollama continua suportado trocando `LLM_BASE_URL` | O MVP precisa ser jogável publicamente (critério do 10) e uma função na Vercel não alcança um Ollama rodando no notebook do grupo. Antes de mudar, testamos localmente: em CPU sem GPU a 1ª geração levou 106,7 s e as seguintes 7–11 s, inviável para o timer de 20 s da sobrevivência. A Groq roda modelos de pesos abertos com latência em torno de 1 s e tem camada gratuita. **Impacto:** o código é o mesmo para os dois provedores (só muda a URL/variável), então o modo local da CP4 continua funcionando. |
+| Modelo de texto | Llama 3.2 **3B** (Meta) | **Qwen 3.8 27B** (Alibaba, pesos abertos) — `qwen/qwen3.8-27b` | O plano era usar o Llama na Groq, mas ao listar os modelos da conta (`GET /models`) em out/2026 a Groq não oferecia mais nenhum Llama de chat (só `llama-prompt-guard`, que é um classificador de segurança). Testamos os dois modelos abertos disponíveis no nosso próprio pipeline (4 fatos, múltipla escolha e V/F): **gpt-oss-20b** 4/4 JSON válido em ~1,1 s, mas a resposta correta costumava ser a alternativa mais longa e detalhada, o que entrega a resposta; **Qwen 3.8 27B** 4/4 válidos em 0,7–1,2 s, com alternativas de tamanho parecido e distratores plausíveis. Escolhemos o Qwen. **Impacto:** nenhum no código (só a variável `LLM_MODEL`); a arquitetura RAG continua a mesma, e o modo local segue funcionando com `llama3.2:3b` ou `qwen2.5:7b` no Ollama. |
 | Banco da base de fatos | SQLite local | **Supabase (PostgreSQL)** | Um arquivo SQLite não persiste em funções serverless (sistema de arquivos efêmero) e não permite PvP entre dois dispositivos. O Supabase dá Postgres gerenciado e Realtime (lobby e placar PvP) no mesmo serviço. **Impacto:** a recuperação RAG continua sendo filtro direto por categoria/dificuldade, como previsto na CP4. |
 | Hospedagem do backend | Uvicorn local | FastAPI como função Python na **Vercel** (Uvicorn só em dev) | Mesmo motivo da publicação. O FastAPI e o Pydantic foram mantidos. |
 | PvP | "dois jogadores competem" (sem definir se local ou online) | Online, com código de sala (Supabase Realtime) | Detalhamento, não remoção: a CP4 citava o Kahoot como referência direta, e o Kahoot é multi-dispositivo. |

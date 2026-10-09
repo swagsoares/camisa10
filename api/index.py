@@ -1,7 +1,7 @@
 """Camisa 10 — backend (FastAPI).
 
 Pipeline (CP4, seção 5): base de fatos (Supabase) -> recuperação por categoria/dificuldade
--> monta prompt (fato + formato + nível) -> LLM Llama (Groq ou Ollama, API compatível com OpenAI)
+-> monta prompt (fato + formato + nível) -> LLM de pesos abertos (Groq ou Ollama, API compatível com OpenAI)
 -> valida JSON com Pydantic -> devolve ao jogo. Se o LLM falhar, usa perguntas já geradas (cache).
 """
 import asyncio
@@ -16,7 +16,7 @@ from pydantic import BaseModel, Field, ValidationError, model_validator
 
 LLM_BASE_URL = os.getenv("LLM_BASE_URL", "https://api.groq.com/openai/v1")
 LLM_API_KEY = os.getenv("LLM_API_KEY", "")
-LLM_MODEL = os.getenv("LLM_MODEL", "llama-3.1-8b-instant")
+LLM_MODEL = os.getenv("LLM_MODEL", "qwen/qwen3.8-27b")
 LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "20"))  # Ollama em CPU precisa de mais (ex.: 120)
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
@@ -62,7 +62,7 @@ def normalizar(bruto: dict, formato: str) -> Pergunta:
     if formato == "multipla_escolha":
         if len(p.alternativas) != 4:
             raise ValueError("múltipla escolha precisa de 4 alternativas")
-        random.shuffle(p.alternativas)  # o Llama quase sempre põe a correta em primeiro
+        random.shuffle(p.alternativas)  # LLMs tendem a pôr a correta em primeiro (visto na CP4)
     return p
 
 
