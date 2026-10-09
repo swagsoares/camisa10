@@ -81,7 +81,7 @@ export default function QuemE({ aoGanhar, aoSair }) {
       <div className="quem-corpo">
         <div className="quem-imagens">
           {temCaricatura && (
-            <figure className="quadro">
+            <figure className="quadro caricatura">
               <img src={`/assets/caricaturas/${j.id}.png`} alt="Caricatura do jogador misterioso" onError={() => setTemCaricatura(false)} />
               <figcaption>🎨 Caricatura (IA · Gemini)</figcaption>
             </figure>

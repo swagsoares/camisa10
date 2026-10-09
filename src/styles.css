@@ -158,3 +158,4 @@ input { font: inherit; padding: .7rem 1rem; border-radius: 10px; border: 2px sol
 .etiqueta { font-weight: 800; font-size: .85rem; opacity: .7; } .etiqueta.nova { color: var(--amarelo); opacity: 1; }
 
 @media (max-width: 900px) { .quem-corpo { grid-template-columns: 1fr; } }
+.quadro.caricatura img { object-fit: contain; object-position: center; background: transparent; }  /* caricaturas horizontais (Buffon voando) não podem ser cortadas */

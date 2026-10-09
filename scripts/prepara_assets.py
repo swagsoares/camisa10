@@ -18,6 +18,7 @@ IMAGENS = {".png", ".jpg", ".jpeg", ".jfif", ".webp"}  # .jfif = JPEG baixado pe
 
 def sem_fundo(origem: Path, destino: Path, lado: int):
     img = Image.open(origem).convert("RGBA")
+    img.thumbnail((lado * 2, lado * 2))  # flood fill do Pillow é pixel a pixel: reduzir antes acelera muito
     w, h = img.size
     for canto in [(0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1)]:
         ImageDraw.floodfill(img, canto, (0, 0, 0, 0), thresh=LIMIAR)
