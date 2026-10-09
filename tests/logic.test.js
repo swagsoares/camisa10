@@ -97,3 +97,12 @@ test('quem é: comparação por país e setor (estilo Who Are Ya)', () => {
   assert.deepEqual(comparar({ pais: 'Argentina', posicao: 'Atacante' }, maradona), { pais: true, setor: false })
   assert.deepEqual(comparar({ pais: 'Brasil', posicao: 'Meia' }, maradona), { pais: false, setor: true })
 })
+
+import { filtroCaricatura } from '../src/logic.js'
+
+test('quem é: caricatura começa como silhueta e só fica nítida no 3º erro', () => {
+  assert.equal(filtroCaricatura(0), 'brightness(0)')
+  assert.equal(filtroCaricatura(1), 'brightness(0)')
+  assert.match(filtroCaricatura(2), /blur/)
+  assert.equal(filtroCaricatura(3), 'none')
+})

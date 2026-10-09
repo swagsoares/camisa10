@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import JOGADORES from '../api/jogadores.json'
 import { api, som, supabase } from './lib'
-import { CHUTES_MAX, acertouJogador, blurFoto, comparar, pontosQuemE, setor } from './logic'
+import { CHUTES_MAX, acertouJogador, blurFoto, comparar, filtroCaricatura, pontosQuemE, setor } from './logic'
 
 const RODADAS = 5
 const sortear = () => [...JOGADORES].sort(() => Math.random() - 0.5).slice(0, RODADAS)
@@ -98,8 +98,9 @@ export default function QuemE({ aoGanhar, aoSair, nome, setNome, verRanking }) {
         <div className="quem-imagens">
           {temCaricatura && (
             <figure className="quadro caricatura">
-              <img src={`/assets/caricaturas/${j.id}.png`} alt="Caricatura do jogador misterioso" onError={() => setTemCaricatura(false)} />
-              <figcaption>🎨 Caricatura (IA · Gemini)</figcaption>
+              <img src={`/assets/caricaturas/${j.id}.png`} alt="Caricatura do jogador misterioso" onError={() => setTemCaricatura(false)}
+                style={{ filter: fim ? 'none' : filtroCaricatura(erros) }} />
+              <figcaption>🎨 Caricatura (IA · Gemini){!fim && erros < 3 && ' · revela com os erros'}</figcaption>
             </figure>
           )}
           <figure className={`quadro ${tremer ? 'tremendo' : ''}`}>

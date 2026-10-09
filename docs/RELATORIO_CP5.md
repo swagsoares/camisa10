@@ -112,6 +112,9 @@
 | Formatos de pergunta | múltipla escolha e V/F | Iguais; V/F é mais frequente no nível 1 | Ajuste de balanceamento. |
 | Modelo único → lista com reserva | 1 modelo | `LLM_MODEL=qwen/qwen3.8-27b,openai/gpt-oss-20b` | Nos testes, a camada gratuita da Groq retornou 429 (cota de 1.000 tokens de saída/min do Qwen). Antes de mudar, limitamos `max_tokens`, o que reduziu a reserva mas não eliminou o risco com vários jogadores ao mesmo tempo. A reserva usa um modelo aberto com cota separada. **Impacto:** nenhum no formato das perguntas (mesma validação Pydantic). |
 | Novos modos: "Quem é esse jogador?" e álbum de figurinhas | Não existiam | Implementados | **Acréscimo**, não substituição: as 4 mecânicas da CP4 seguem intactas. Usam as mesmas modalidades de IA já planejadas: texto (LLM narra dicas a partir de pistas curadas, com a mesma lógica RAG) e imagem (caricaturas no Gemini, como o mascote). Uma ideia inicial de usar IA de vídeo e misturar rostos de famosos foi descartada por questões éticas e de direito de imagem; as fotos reais vêm da Wikimedia Commons, com licença livre e crédito. |
+| Tela 1 — Menu principal | 4 botões (Campanha, PvP, Sobrevivência, Filtros e Configurações) + título + mascote + fundo | Os mesmos 4 botões, na mesma ordem e com as mesmas cores, + botão "Quem é esse jogador?" + atalhos para Álbum e Ranking | Os botões novos dão acesso aos modos acrescentados; todos os elementos numerados do mockup (título, mascote, fundo, 4 botões) continuam presentes. No celular, o mascote vai para cima dos botões para caber na tela. |
+| Tela 3 — Seleção de modo e filtros | Filtros (categoria, dificuldade) à esquerda e modo à direita; botão "Iniciar partida" dentro dos filtros | Mesmos elementos, reordenados: 1. modo (com descrição) → 2. filtros → botão "Iniciar <modo>"; + seção Configurações (nome, som, apagar progresso) | No celular, o botão "Iniciar" aparecia **antes** da escolha de modo (a coluna da direita caía para baixo) e não ficava claro qual modo estava escolhido. Os filtros também apareciam na Campanha, onde não valem (a trilha define tema e nível). E o mockup chamava a tela de "Filtros e **Configurações**", mas não existia nenhuma configuração; a seção nova cumpre esse nome. |
+| "Quem é esse jogador?" — revelação da caricatura | (modo novo) | Caricatura começa em **silhueta**, fica colorida e borrada no 2º erro e nítida no 3º (estilo "Quem é esse Pokémon?") | Nos testes, a caricatura nítida entregava a resposta logo de cara e o modo ficava fácil demais. Agora ela revela aos poucos, como a foto. |
 
 ## 5. Checklist de testes manuais — ✍️ preencher jogando
 
@@ -129,16 +132,18 @@
 | 10 | PvP: anfitrião clica "Começar" | Os dois recebem as mesmas perguntas | ✅ OK |
 | 11 | PvP: os dois terminam | Placar ao vivo com o vencedor 🏆 | ✅ OK (atualizou sem recarregar) |
 | 12 | Filtros: Estatísticas + Difícil + Sobrevivência | Perguntas só dessa categoria | |
-| 13 | Celular (tela estreita) | Layout em 1 coluna, jogável | |
+| 13 | Celular (tela estreita) | Layout em 1 coluna, jogável | ✅ OK (375px: menu e gameplay sem rolagem lateral) |
 | 14 | Quem é: chute errado | Foto clareia, nova dica abre, valor cai 200 pts | ✅ OK (blur 28px → 13px após 2 erros) |
 | 15 | Quem é: chute certo ("haaland" minúsculo e sem acento) | "Golaço!", pacotinho com a figurinha NOVA | ✅ OK |
 | 16 | Quem é: IA fora do ar | Dicas com selo "dicas do grupo" | ✅ (teste automatizado) |
 | 17 | Álbum | Mostra coladas, vagas numeradas, brilhantes douradas, "x2" nas repetidas | ✅ OK |
+| 18 | Passar fase nível 3 da campanha | Pacotinho com 3 figurinhas, 1 brilhante | |
+| 19 | Vencer PvP | Pacotinho com 3 figurinhas para o vencedor e 1 para o outro | |
 | 20 | Quem é: chutar outro jogador do álbum | Pistas de país e setor (verde = igual) | ✅ OK ("Messi" num desafio do Cristiano → "Ataque = mesmo setor") |
 | 21 | Filtros: escolher Sobrevivência | Filtros aparecem e o botão vira "INICIAR SOBREVIVÊNCIA" | ✅ OK |
 | 22 | Configurações: desligar o som | Sem efeitos sonoros até religar | ✅ OK |
-| 18 | Passar fase nível 3 da campanha | Pacotinho com 3 figurinhas, 1 brilhante | |
-| 19 | Vencer PvP | Pacotinho com 3 figurinhas para o vencedor e 1 para o outro | |
+| 23 | Quem é: início da rodada | Caricatura em silhueta preta e foto bem borrada | ✅ OK |
+| 24 | Jogo publicado (https://camisa10-three.vercel.app) | Abre sem instalar nada; IA, ranking, Quem é e PvP funcionam | ✅ OK |
 
 **Testes automatizados:** `npm test`, com 25 testes, também rodando no GitHub Actions a cada push (trilha, aprovação, dificuldade progressiva, pontuação, streak, placar PvP, chute do "Quem é", recompensas e pacotinhos, validação da saída do LLM, anti-alucinação das dicas, fallback para cache e pistas curadas, 404/422/503).
 

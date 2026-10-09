@@ -41,6 +41,12 @@ export const CHUTES_MAX = 5
 // A foto começa irreconhecível e clareia a cada chute errado; na 5ª tentativa fica nítida.
 export const BLUR_POR_ERRO = [28, 20, 13, 7, 2]
 export const blurFoto = (erros) => BLUR_POR_ERRO[Math.min(erros, BLUR_POR_ERRO.length - 1)]
+// Caricatura no estilo "Quem é esse Pokémon?": silhueta -> borrada -> nítida (ela entrega muito se vier nítida).
+export function filtroCaricatura(erros) {
+  if (erros < 2) return 'brightness(0)'
+  if (erros < 3) return 'blur(6px)'
+  return 'none'
+}
 export const pontosQuemE = (erros) => (erros >= CHUTES_MAX ? 0 : 1000 - erros * 200)
 
 const limpo = (t) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
