@@ -159,3 +159,19 @@ input { font: inherit; padding: .7rem 1rem; border-radius: 10px; border: 2px sol
 
 @media (max-width: 900px) { .quem-corpo { grid-template-columns: 1fr; } }
 .quadro.caricatura img { object-fit: contain; object-position: center; background: transparent; }  /* caricaturas horizontais (Buffon voando) não podem ser cortadas */
+
+/* Tela de filtros e configurações */
+.painel.largo { width: 100%; max-width: 1040px; margin: 0 auto; }
+.painel h4 { margin: .2rem 0 0; display: flex; gap: .5rem; align-items: baseline; flex-wrap: wrap; }
+.modos { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: .8rem; }
+.modo { position: relative; border: 3px solid transparent; border-radius: 14px; padding: 1rem; color: #fff; text-align: left;
+  display: flex; flex-direction: column; gap: .3rem; filter: saturate(.55) brightness(.8); transition: filter .2s, transform .1s; }
+.modo:hover { filter: none; transform: translateY(-2px); }
+.modo.escolhido { filter: none; border-color: #fff; box-shadow: 0 0 0 3px var(--amarelo), 0 6px 0 rgba(0, 0, 0, .35); }
+.modo.amarelo { color: #222; } .modo small { opacity: .9; }
+.modo-icone { font-size: 1.8rem; }
+.check { position: absolute; top: .5rem; right: .6rem; background: #fff; color: #1f7a45; border-radius: 50%; width: 1.6rem; height: 1.6rem;
+  display: grid; place-items: center; font-weight: 900; }
+.config summary { cursor: pointer; list-style: none; } .config summary h3 { display: inline; }
+.config[open] summary { margin-bottom: .6rem; }
+.config-linha { justify-content: space-between; align-items: center; }

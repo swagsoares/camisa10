@@ -40,7 +40,13 @@ export default function App() {
   function iniciarPelosFiltros() {
     if (filtros.modo === 'campanha') ir('trilha')
     else if (filtros.modo === 'pvp') ir('pvp')
+    else if (filtros.modo === 'quem') ir('quem')
     else jogarSobrevivencia()
+  }
+
+  function apagarProgresso() {
+    setConcluidas([])
+    setColecao({})
   }
 
   function fim(placar) {
@@ -57,7 +63,8 @@ export default function App() {
   return (
     <div className="app">
       {tela === 'menu' && <Menu ir={ir} jogarSobrevivencia={jogarSobrevivencia} coladas={Object.keys(colecao).length} />}
-      {tela === 'filtros' && <Filtros filtros={filtros} setFiltros={setFiltros} iniciar={iniciarPelosFiltros} voltar={() => ir('menu')} />}
+      {tela === 'filtros' && <Filtros filtros={filtros} setFiltros={setFiltros} iniciar={iniciarPelosFiltros} voltar={() => ir('menu')}
+        nome={nome} setNome={setNome} apagarProgresso={apagarProgresso} />}
       {tela === 'trilha' && <Trilha concluidas={concluidas} jogar={jogarFase} voltar={() => ir('menu')} />}
       {tela === 'jogo' && <Partida key={partida.id} partida={partida} aoFim={fim} aoSair={() => ir('menu')} />}
       {tela === 'resultado' && (
@@ -97,38 +104,81 @@ function Menu({ ir, jogarSobrevivencia, coladas }) {
   )
 }
 
-function Filtros({ filtros, setFiltros, iniciar, voltar }) {
+const MODOS = [
+  { id: 'campanha', nome: 'Campanha', icone: '🗺️', cor: 'verde', desc: 'Avance pela trilha de 12 fases.', filtros: false },
+  { id: 'pvp', nome: 'PvP', icone: '⚔️', cor: 'azul', desc: 'Desafie um amigo com código de sala.', filtros: true },
+  { id: 'sobrevivencia', nome: 'Sobrevivência', icone: '⏱️', cor: 'vermelho', desc: '20 s por pergunta. Errou, acabou.', filtros: true },
+  { id: 'quem', nome: 'Quem é esse jogador?', icone: '🕵️', cor: 'amarelo', desc: 'Descubra o craque pelas dicas.', filtros: false },
+]
+
+// Tela 3 do mockup da CP4: primeiro o modo, depois os filtros que esse modo usa, depois as configurações.
+function Filtros({ filtros, setFiltros, iniciar, voltar, nome, setNome, apagarProgresso }) {
+  const [somLigado, setSomLigado] = useState(() => salvo.ler('som', true))
+  const [apagado, setApagado] = useState(false)
   const set = (k, v) => setFiltros({ ...filtros, [k]: v })
+  const modo = MODOS.find((m) => m.id === filtros.modo) ?? MODOS[0]
+  const alternarSom = () => { salvo.gravar('som', !somLigado); setSomLigado(!somLigado) }
+
   return (
     <div className="tela filtros">
       <h1 className="titulo-tela">ESCOLHA SUA PARTIDA</h1>
-      <div className="filtros-corpo">
-        <section className="painel claro">
-          <h3>CATEGORIA</h3>
-          <div className="chips">
-            {BLOCOS.map((b) => (
-              <button key={b.id} className={`chip ${filtros.categoria === b.id ? 'ativo verde' : ''}`}
-                onClick={() => set('categoria', filtros.categoria === b.id ? null : b.id)}>{b.icone} {b.nome}</button>
-            ))}
-          </div>
-          <p className="dica escura">{filtros.categoria ? 'Clique de novo para misturar todas.' : 'Todas as categorias misturadas.'}</p>
-          <h3>DIFICULDADE</h3>
-          <div className="chips">
-            {NIVEIS.map((n, i) => (
-              <button key={n} className={`chip ${filtros.dificuldade === i + 1 ? 'ativo amarelo' : ''}`} onClick={() => set('dificuldade', i + 1)}>{n}</button>
-            ))}
-          </div>
-          <button className="btn verde grande" onClick={iniciar}>INICIAR PARTIDA</button>
-        </section>
-        <section className="painel">
-          <h3 className="amarelo-txt">MODO DE JOGO</h3>
-          {[['campanha', 'Campanha', 'verde'], ['pvp', 'PvP', 'azul'], ['sobrevivencia', 'Sobrevivência', 'vermelho']].map(([id, rot, cor]) => (
-            <button key={id} className={`btn ${cor} grande ${filtros.modo === id ? 'selecionado' : 'opaco'}`} onClick={() => set('modo', id)}>{rot}</button>
+
+      <section className="painel largo">
+        <h3 className="amarelo-txt">1. MODO DE JOGO</h3>
+        <div className="modos">
+          {MODOS.map((m) => (
+            <button key={m.id} className={`modo ${m.cor} ${m.id === modo.id ? 'escolhido' : ''}`} onClick={() => set('modo', m.id)} aria-pressed={m.id === modo.id}>
+              <span className="modo-icone">{m.icone}</span>
+              <b>{m.nome}</b>
+              <small>{m.desc}</small>
+              {m.id === modo.id && <span className="check">✓</span>}
+            </button>
           ))}
-          <p className="dica">Campanha segue a trilha (os filtros valem para PvP e Sobrevivência).</p>
-          <button className="btn cinza" onClick={voltar}>Voltar</button>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      <section className="painel claro largo">
+        <h3>2. FILTROS</h3>
+        {modo.filtros ? (
+          <>
+            <h4>Categoria</h4>
+            <div className="chips">
+              <button className={`chip ${!filtros.categoria ? 'ativo verde' : ''}`} onClick={() => set('categoria', null)}>🎲 Todas</button>
+              {BLOCOS.map((b) => (
+                <button key={b.id} className={`chip ${filtros.categoria === b.id ? 'ativo verde' : ''}`} onClick={() => set('categoria', b.id)}>{b.icone} {b.nome}</button>
+              ))}
+            </div>
+            <h4>Dificuldade {modo.id === 'sobrevivencia' && <small className="dica escura">(inicial; sobe a cada 3 acertos)</small>}</h4>
+            <div className="chips">
+              {NIVEIS.map((n, i) => (
+                <button key={n} className={`chip ${filtros.dificuldade === i + 1 ? 'ativo amarelo' : ''}`} onClick={() => set('dificuldade', i + 1)}>{n}</button>
+              ))}
+            </div>
+          </>
+        ) : (
+          <p className="dica escura">{modo.id === 'campanha' ? '🗺️ Na campanha, a trilha define o tema e o nível de cada fase.' : '🕵️ Os 24 craques são sorteados a cada partida.'}</p>
+        )}
+        <button className={`btn grande ${modo.cor}`} onClick={iniciar}>INICIAR {modo.nome.toUpperCase()} ➜</button>
+      </section>
+
+      <details className="painel largo config">
+        <summary><h3>⚙️ CONFIGURAÇÕES</h3></summary>
+        <label>Seu nome (ranking e PvP)
+          <input value={nome} maxLength={20} onChange={(e) => setNome(e.target.value)} placeholder="Ex.: Vitor" />
+        </label>
+        <div className="linha config-linha">
+          <span>Efeitos sonoros</span>
+          <button className={`btn ${somLigado ? 'verde' : 'cinza'}`} onClick={alternarSom} aria-pressed={somLigado}>{somLigado ? '🔊 Ligado' : '🔇 Desligado'}</button>
+        </div>
+        <div className="linha config-linha">
+          <span>Apagar progresso (trilha e álbum)</span>
+          <button className="btn vermelho" disabled={apagado} onClick={() => {
+            if (window.confirm('Apagar as fases concluídas e todas as figurinhas? Não dá para desfazer.')) { apagarProgresso(); setApagado(true) }
+          }}>{apagado ? 'Apagado ✓' : '🗑️ Apagar'}</button>
+        </div>
+      </details>
+
+      <button className="btn cinza" onClick={voltar}>Voltar ao menu</button>
     </div>
   )
 }

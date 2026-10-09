@@ -22,6 +22,7 @@ export const salvo = {
 // Feedback sonoro sintetizado (sem arquivos de áudio).
 let ctx
 export function som(tipo) {
+  if (salvo.ler('som', true) === false) return // desligado nas Configurações
   try {
     ctx ??= new AudioContext()
     const notas = { acerto: [523, 784], erro: [220, 147], fim: [523, 659, 784, 1047] }[tipo]
