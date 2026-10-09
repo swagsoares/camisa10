@@ -13,6 +13,7 @@ from PIL import Image, ImageDraw
 AQUI = Path(__file__).parent
 SAIDA = AQUI.parent / "public" / "assets"
 LIMIAR = 40  # tolerância de cor do flood fill a partir do branco da borda
+IMAGENS = {".png", ".jpg", ".jpeg", ".jfif", ".webp"}  # .jfif = JPEG baixado pelo Chrome
 
 
 def sem_fundo(origem: Path, destino: Path, lado: int):
@@ -29,7 +30,7 @@ sem_fundo(AQUI / "mascote_original.png", SAIDA / "mascote.png", 512)
 Image.open(AQUI / "estadio_original.png").convert("RGB").save(SAIDA / "estadio.jpg", quality=82, optimize=True)
 
 (SAIDA / "caricaturas").mkdir(exist_ok=True)
-for arq in sorted((AQUI / "caricaturas_original").glob("*.[pjw]*[gp]")):  # png, jpg, jpeg, webp
+for arq in sorted(p for p in (AQUI / "caricaturas_original").iterdir() if p.suffix.lower() in IMAGENS):
     sem_fundo(arq, SAIDA / "caricaturas" / f"{arq.stem}.png", 600)
     print("caricatura:", arq.stem)
 print("ok")
