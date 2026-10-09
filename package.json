@@ -1,0 +1,20 @@
+{
+  "name": "camisa10",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "api": "uvicorn api.index:app --reload --port 8000 --env-file .env",
+    "build": "vite build",
+    "test": "node --test tests/*.test.js && python -m pytest -q"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.3",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.2",
+    "vite": "^8.3.4"
+  }
+}

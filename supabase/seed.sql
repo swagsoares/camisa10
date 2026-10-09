@@ -1,0 +1,57 @@
+-- Base de fatos curada pelo grupo (revisar antes de adicionar novos!).
+-- Fatos que a Copa de 2026 poderia mudar estão datados ("até 2022").
+truncate facts restart identity cascade;
+
+insert into facts (categoria, dificuldade, fato) values
+-- REGRAS
+('regras',1,'Uma partida oficial de futebol tem dois tempos de 45 minutos cada.'),
+('regras',1,'Cada equipe começa a partida com 11 jogadores em campo, incluindo o goleiro.'),
+('regras',1,'O jogador que recebe cartão vermelho é expulso e sua equipe não pode substituí-lo.'),
+('regras',1,'Dois cartões amarelos para o mesmo jogador na mesma partida resultam em expulsão (cartão vermelho).'),
+('regras',2,'Não existe impedimento quando o jogador recebe a bola diretamente de um tiro de meta, arremesso lateral ou escanteio.'),
+('regras',2,'Uma partida não pode continuar se uma das equipes ficar com menos de 7 jogadores.'),
+('regras',2,'Na cobrança de pênalti, o goleiro deve estar com pelo menos parte de um pé sobre a linha do gol no momento do chute.'),
+('regras',2,'No tiro livre direto o gol pode ser marcado diretamente; no tiro livre indireto a bola precisa tocar outro jogador antes de entrar.'),
+('regras',3,'O VAR (árbitro assistente de vídeo) foi usado pela primeira vez em uma Copa do Mundo em 2018, na Rússia.'),
+('regras',3,'As regras do futebol são definidas pela IFAB (International Football Association Board), criada em 1886.'),
+('regras',3,'A regra do recuo, que proíbe o goleiro de pegar com as mãos um passe intencional feito com o pé por um companheiro, foi introduzida em 1992.'),
+('regras',3,'Em competições oficiais, a prorrogação é disputada em dois tempos de 15 minutos cada.'),
+-- HISTÓRIA
+('historia',1,'Até a Copa de 2022, o Brasil era o país com mais títulos de Copa do Mundo: 5 conquistas (1958, 1962, 1970, 1994 e 2002).'),
+('historia',1,'A primeira Copa do Mundo foi disputada em 1930, no Uruguai, e o próprio Uruguai foi o campeão.'),
+('historia',1,'A Argentina venceu a Copa do Mundo de 2022, no Catar, derrotando a França nos pênaltis na final.'),
+('historia',1,'O Brasil sediou a Copa do Mundo duas vezes: em 1950 e em 2014.'),
+('historia',2,'Na decisão da Copa de 1950, o Uruguai venceu o Brasil por 2 a 1 no Maracanã, episódio conhecido como Maracanazo.'),
+('historia',2,'Na semifinal da Copa de 2014, a Alemanha venceu o Brasil por 7 a 1 no Mineirão, em Belo Horizonte.'),
+('historia',2,'A Copa do Mundo de 2026 foi sediada por Estados Unidos, Canadá e México e foi a primeira com 48 seleções.'),
+('historia',2,'Até a Copa de 2022, Alemanha e Itália tinham 4 títulos de Copa do Mundo cada uma.'),
+('historia',3,'A Copa de 2002 foi a primeira sediada por dois países: Japão e Coreia do Sul.'),
+('historia',3,'A taça Jules Rimet ficou definitivamente com o Brasil após a conquista do tricampeonato em 1970.'),
+('historia',3,'A Espanha conquistou sua primeira Copa do Mundo em 2010, na África do Sul, vencendo a Holanda por 1 a 0 na final.'),
+('historia',3,'A Copa do Mundo de 2022, no Catar, foi a primeira disputada nos meses de novembro e dezembro.'),
+-- CRAQUES
+('craques',1,'Pelé é o único jogador a ganhar três Copas do Mundo: 1958, 1962 e 1970.'),
+('craques',1,'Lionel Messi era o capitão da Argentina na conquista da Copa do Mundo de 2022.'),
+('craques',1,'Cristiano Ronaldo é português e jogou por clubes como Manchester United, Real Madrid e Juventus.'),
+('craques',1,'Ronaldo Fenômeno foi o artilheiro da Copa de 2002 com 8 gols, incluindo os dois gols da final contra a Alemanha.'),
+('craques',2,'Lionel Messi ganhou a Bola de Ouro 8 vezes, mais do que qualquer outro jogador.'),
+('craques',2,'Marta foi eleita a melhor jogadora do mundo pela FIFA seis vezes.'),
+('craques',2,'Zinedine Zidane marcou dois gols de cabeça na final da Copa de 1998, quando a França venceu o Brasil por 3 a 0.'),
+('craques',2,'Garrincha foi o grande destaque do bicampeonato do Brasil em 1962, já que Pelé se machucou no início do torneio.'),
+('craques',3,'Diego Maradona marcou o gol conhecido como "La Mano de Dios" contra a Inglaterra nas quartas de final da Copa de 1986.'),
+('craques',3,'O francês Just Fontaine marcou 13 gols na Copa de 1958, recorde de gols de um jogador em uma única edição de Copa.'),
+('craques',3,'Zico foi o principal craque do Flamengo campeão mundial de clubes em 1981, vencendo o Liverpool por 3 a 0.'),
+('craques',3,'Ronaldinho Gaúcho ganhou a Bola de Ouro em 2005 jogando pelo Barcelona.'),
+-- ESTATÍSTICAS
+('estatisticas',1,'O gol de futebol oficial tem 7,32 metros de largura e 2,44 metros de altura.'),
+('estatisticas',1,'O Brasil é a única seleção que disputou todas as edições da Copa do Mundo realizadas até 2022.'),
+('estatisticas',1,'O Real Madrid é o clube com mais títulos da Liga dos Campeões da UEFA: 15 conquistas até a temporada 2023/24.'),
+('estatisticas',1,'O Maracanã, no Rio de Janeiro, recebeu a final da Copa do Mundo de 1950 e a de 2014.'),
+('estatisticas',2,'Até 2022, o maior número de gols marcados por uma seleção em um jogo de Copa era 10, na vitória da Hungria por 10 a 1 sobre El Salvador em 1982.'),
+('estatisticas',2,'O Santos de Pelé conquistou a Copa Libertadores em 1962 e em 1963.'),
+('estatisticas',2,'O Palmeiras conquistou a Copa Libertadores em 2020 e em 2021, de forma consecutiva.'),
+('estatisticas',2,'Segundo o Guinness World Records, Pelé marcou 1.279 gols em 1.363 partidas na carreira.'),
+('estatisticas',3,'A seleção brasileira masculina conquistou sua primeira medalha de ouro olímpica no futebol em 2016, no Rio de Janeiro.'),
+('estatisticas',3,'Cristiano Ronaldo é o maior artilheiro da história da Liga dos Campeões da UEFA, com 140 gols.'),
+('estatisticas',3,'O público oficial da final da Copa de 1950, no Maracanã, foi de 173.850 pagantes.'),
+('estatisticas',3,'A Alemanha venceu a final da Copa de 2014 contra a Argentina por 1 a 0, com gol de Mario Götze na prorrogação.');
